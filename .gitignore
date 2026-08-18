@@ -19,3 +19,6 @@ Thumbs.db
 
 # Temp audio from voice pipeline
 temp_audio/
+
+# Generated audio from TTS
+generated_audio/

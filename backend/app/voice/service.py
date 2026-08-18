@@ -8,7 +8,15 @@ class VoiceService:
     """
     Coordinates:
 
-    Audio → STT → existing AI orchestration → TTS → Audio
+    Audio
+        ↓
+    STT + language detection
+        ↓
+    existing AI orchestration + persona
+        ↓
+    TTS in detected language
+        ↓
+    Audio
     """
 
     def __init__(
@@ -22,22 +30,29 @@ class VoiceService:
     def process(
         self,
         audio_path: str,
-        ai_handler: Callable[[str], dict[str, Any]],
+        ai_handler: Callable[[str, str], dict[str, Any]],
     ) -> dict[str, Any]:
-        # 1. Audio → text
-        text = self.stt_provider.transcribe(audio_path)
+        # 1. Audio → text + detected language
+        transcription = self.stt_provider.transcribe(audio_path)
 
-        # 2. Text → existing AI orchestration
-        ai_result = ai_handler(text)
+        text = transcription["text"]
+        language = transcription["language"]
+
+        # 2. Text + language → existing AI orchestration
+        ai_result = ai_handler(text, language)
 
         # 3. AI result → response text
         response_text = self._extract_response_text(ai_result)
 
-        # 4. Response text → audio
-        audio_output = self.tts_provider.synthesize(response_text)
+        # 4. Response text → audio in the detected language
+        audio_output = self.tts_provider.synthesize(
+            response_text,
+            language,
+        )
 
         return {
             "text": text,
+            "language": language,
             "ai_result": ai_result,
             "audio": audio_output,
         }

@@ -109,6 +109,7 @@ def act_on_message(
     """
 
     text = data.text.strip()
+    language = data.language.lower().strip()
 
     if not text:
         raise HTTPException(
@@ -443,6 +444,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -518,6 +520,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -630,6 +633,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -682,6 +686,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -794,6 +799,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=confirmation_result,
+            language=language,
         )
 
         return ActResponse(
@@ -826,6 +832,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -910,6 +917,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=confirmation_result,
+            language=language,
         )
 
         return ActResponse(
@@ -950,6 +958,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -1002,6 +1011,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -1055,6 +1065,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -1108,6 +1119,7 @@ def act_on_message(
             role=role_name,
             intent=intent,
             result=data_out,
+            language=language,
         )
 
         ConversationManager.save_result(
@@ -1237,6 +1249,7 @@ def confirm_action(
             role=role_name,
             intent=action.intent,
             result=result,
+            language="en",
         )
 
         ConversationManager.clear_pending_action(

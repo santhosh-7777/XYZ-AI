@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class UnderstandRequest(BaseModel):
     text: str
+    language: str = "en"
 
 
 class UnderstandResponse(BaseModel):
@@ -12,10 +13,12 @@ class UnderstandResponse(BaseModel):
     confidence: float
     entities: dict[str, Any]
 
+
 class ActResponse(BaseModel):
     intent: str
     entities: dict[str, Any]
     result: dict[str, Any]
+
 
 class ConfirmationRequest(BaseModel):
     action_id: str

@@ -9,6 +9,8 @@ class FasterWhisperSTTProvider(STTProvider):
 
     The model is loaded lazily on the first transcription request
     so application startup is not blocked.
+
+    Faster Whisper automatically detects the spoken language.
     """
 
     def __init__(self) -> None:
@@ -24,11 +26,26 @@ class FasterWhisperSTTProvider(STTProvider):
 
         return self.model
 
-    def transcribe(self, audio_path: str) -> str:
+    def transcribe(self, audio_path: str) -> dict[str, str]:
+        """
+        Convert audio to text and detect the spoken language.
+
+        Returns:
+            {
+                "text": "...",
+                "language": "en"
+            }
+        """
+
         model = self._get_model()
 
-        segments, _ = model.transcribe(audio_path)
+        segments, info = model.transcribe(audio_path)
 
-        text = "".join(segment.text for segment in segments)
+        text = "".join(segment.text for segment in segments).strip()
 
-        return text.strip()
+        language = info.language
+
+        return {
+            "text": text,
+            "language": language,
+        }
