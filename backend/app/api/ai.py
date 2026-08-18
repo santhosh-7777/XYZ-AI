@@ -6,6 +6,9 @@ from ML.inference.understand import understand
 from backend.app.ai.parent_lookup import resolve_child
 from backend.app.ai.student_lookup import resolve_student_id
 from backend.app.tools.fees import FeeTool
+from backend.app.tools.exam import ExamTool
+from backend.app.tools.assignment import AssignmentTool
+from backend.app.tools.academic_performance import AcademicPerformanceTool
 
 from backend.app.conversation.context import ConversationContextStore
 from backend.app.conversation.manager import ConversationManager
@@ -370,7 +373,8 @@ def act_on_message(
 
         message = (
             "I can help you with school-related information such as "
-            "attendance, attendance history, timetables, and other "
+            "attendance, attendance history, timetables, exams, "
+            "assignments, academic performance, fees, and other "
             "academic requests available to your role. "
             "You can also ask me to connect you with a teacher "
             "or school management when human assistance is needed."
@@ -969,6 +973,165 @@ def act_on_message(
         )
 
     # =========================================================
+    # EXAM
+    #
+    # Read-only academic information.
+    #
+    # All supported roles may access exam information.
+    # =========================================================
+
+    if intent == "EXAM":
+
+        if role_name not in {
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "PRINCIPAL",
+        }:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Your role is not authorized "
+                    "to view exam information."
+                ),
+            )
+
+        data_out = ExamTool.execute(user.id)
+
+        message = PersonaService.format_response(
+            role=role_name,
+            intent=intent,
+            result=data_out,
+        )
+
+        ConversationManager.save_result(
+            user_id=user.id,
+            intent=intent,
+            tool="get_exams",
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+        return ActResponse(
+            intent=intent,
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+
+    # =========================================================
+    # ASSIGNMENT
+    #
+    # Read-only academic information.
+    #
+    # All supported roles may access assignment information.
+    # =========================================================
+
+    if intent == "ASSIGNMENT":
+
+        if role_name not in {
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "PRINCIPAL",
+        }:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Your role is not authorized "
+                    "to view assignment information."
+                ),
+            )
+
+        data_out = AssignmentTool.execute(user.id)
+
+        message = PersonaService.format_response(
+            role=role_name,
+            intent=intent,
+            result=data_out,
+        )
+
+        ConversationManager.save_result(
+            user_id=user.id,
+            intent=intent,
+            tool="get_assignments",
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+        return ActResponse(
+            intent=intent,
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+
+    # =========================================================
+    # ACADEMIC PERFORMANCE
+    #
+    # Read-only academic information.
+    #
+    # All supported roles may access academic performance.
+    # =========================================================
+
+    if intent == "ACADEMIC_PERFORMANCE":
+
+        if role_name not in {
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "PRINCIPAL",
+        }:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Your role is not authorized "
+                    "to view academic performance."
+                ),
+            )
+
+        data_out = AcademicPerformanceTool.execute(user.id)
+
+        message = PersonaService.format_response(
+            role=role_name,
+            intent=intent,
+            result=data_out,
+        )
+
+        ConversationManager.save_result(
+            user_id=user.id,
+            intent=intent,
+            tool="get_academic_performance",
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+        return ActResponse(
+            intent=intent,
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+
+    # =========================================================
     # NOT YET IMPLEMENTED
     #
     # We intentionally do NOT pretend unsupported services
@@ -977,11 +1140,8 @@ def act_on_message(
     # These will be added as independent service + tool
     # modules in subsequent phases:
     #
-    #     EXAM
-    #     ASSIGNMENT
-    #     ACADEMIC_PERFORMANCE
-    #     FEES
     #     ANNOUNCEMENT
+    #     LEAVE
     #
     # =========================================================
 
