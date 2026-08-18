@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import api, { getAuthToken } from "@/lib/api";
+import api from "@/lib/api";
 
 interface Message {
   role: "user" | "assistant";
@@ -38,10 +38,52 @@ export default function ChatPage() {
         { role: "assistant", text: replyText },
       ]);
     } catch (err: any) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", text: "Error: could not reach the assistant." },
-      ]);
+      // Handle confirmation-required responses (409 Conflict)
+      if (err.response?.status === 409) {
+        const detail: string = err.response.data?.detail || "";
+        const match = detail.match(/action_id '([^']+)'/);
+
+        if (match) {
+          const actionId = match[1];
+
+          try {
+            const confirmResponse = await api.post("/ai/confirm", {
+              action_id: actionId,
+            });
+            const confirmResult = confirmResponse.data.result;
+            const replyText =
+              confirmResult?.message ||
+              JSON.stringify(confirmResult) ||
+              "Action confirmed.";
+
+            setMessages((prev) => [
+              ...prev,
+              { role: "assistant", text: replyText },
+            ]);
+          } catch (confirmErr: any) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: "assistant",
+                text: "Error: could not confirm the pending action.",
+              },
+            ]);
+          }
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              text: "There's a pending action but I couldn't identify it.",
+            },
+          ]);
+        }
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", text: "Error: could not reach the assistant." },
+        ]);
+      }
     } finally {
       setLoading(false);
     }

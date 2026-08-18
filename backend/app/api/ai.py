@@ -5,6 +5,7 @@ from ML.inference.understand import understand
 
 from backend.app.ai.parent_lookup import resolve_child
 from backend.app.ai.student_lookup import resolve_student_id
+from backend.app.tools.fees import FeeTool
 
 from backend.app.conversation.context import ConversationContextStore
 from backend.app.conversation.manager import ConversationManager
@@ -916,6 +917,57 @@ def act_on_message(
             },
         )
 
+        # =========================================================
+    # FEES
+    #
+    # Read-only financial information.
+    #
+    # Only PARENT and PRINCIPAL may access fee information,
+    # per the RBAC policy.
+    # =========================================================
+
+    if intent == "FEES":
+
+        if role_name not in {
+            "PARENT",
+            "PRINCIPAL",
+        }:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Your role is not authorized "
+                    "to view fee information."
+                ),
+            )
+
+        data_out = FeeTool.execute(user.id)
+
+        message = PersonaService.format_response(
+            role=role_name,
+            intent=intent,
+            result=data_out,
+        )
+
+        ConversationManager.save_result(
+            user_id=user.id,
+            intent=intent,
+            tool="get_fees",
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
+        return ActResponse(
+            intent=intent,
+            entities=entities,
+            result={
+                **data_out,
+                "message": message,
+            },
+        )
+
     # =========================================================
     # NOT YET IMPLEMENTED
     #
@@ -954,6 +1006,7 @@ def act_on_message(
 def confirm_action(
     data: ConfirmationRequest,
     user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """
     Confirm and execute a previously approved
@@ -1005,6 +1058,7 @@ def confirm_action(
             result=result,
         )
 
+   
     # =========================================================
     # ESCALATION
     # =========================================================
@@ -1016,6 +1070,15 @@ def confirm_action(
             target=action.arguments["target"],
         )
 
+        role = db.get(Role, user.role_id)
+        role_name = role.name.upper() if role else "STUDENT"
+
+        message = PersonaService.format_response(
+            role=role_name,
+            intent=action.intent,
+            result=result,
+        )
+
         ConversationManager.clear_pending_action(
             user.id
         )
@@ -1024,7 +1087,10 @@ def confirm_action(
             confirmed=True,
             action_id=action.action_id,
             intent=action.intent,
-            result=result,
+            result={
+                **result,
+                "message": message,
+            },
         )
 
     # =========================================================

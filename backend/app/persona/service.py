@@ -337,6 +337,37 @@ class PersonaService:
                 "Please confirm this action.",
             )
 
+                # =====================================================
+        # FEES
+        # =====================================================
+
+        if intent == "FEES":
+            total = result.get("total_fees")
+            paid = result.get("paid_amount")
+            pending = result.get("pending_amount")
+            currency = result.get("currency", "")
+            fee_status = result.get("status", "")
+
+            if total is not None:
+                if fee_status == "PARTIALLY_PAID":
+                    return (
+                        f"You have paid {currency} {paid:,.2f} "
+                        f"out of {currency} {total:,.2f}. "
+                        f"Pending amount: {currency} {pending:,.2f}."
+                    )
+
+                if fee_status == "PAID":
+                    return (
+                        f"All fees are paid. Total: "
+                        f"{currency} {total:,.2f}."
+                    )
+
+                return (
+                    f"Total fees: {currency} {total:,.2f}, "
+                    f"paid: {currency} {paid:,.2f}, "
+                    f"pending: {currency} {pending:,.2f}."
+                )
+
         # =====================================================
         # SAFE GENERIC FALLBACK
         # =====================================================
