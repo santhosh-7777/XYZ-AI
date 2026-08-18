@@ -1,0 +1,121 @@
+﻿text_a,intent_a,text_b,intent_b,hard_negative_group
+माझी उपस्थिती किती आहे?,OWN_ATTENDANCE,माझ्या मुलाची उपस्थिती कशी आहे?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+আমার উপস্থিতি পরীক্ষা করে দিতে পারবেন?,OWN_ATTENDANCE,എന്റെ മകന്റെ ഹാജർ എങ്ങനെയാണ്?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+എന്റെ ഹാജർ ശതമാനം എത്രയാണ്?,OWN_ATTENDANCE,தயவுசெய்து ராகுலின் வருகையை சரிபார்க்க முடியுமா?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+براہ کرم میری حاضری کتنی ہے؟,OWN_ATTENDANCE,என் மகனின் வருகை எப்படி உள்ளது?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+ਮੇਰੀ ਹਾਜ਼ਰੀ ਕਿੰਨੀ ਹੈ?,OWN_ATTENDANCE,ராகுலின் வருகையை சரிபார்க்க முடியுமா?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+माझी उपस्थिती किती टक्के आहे?,OWN_ATTENDANCE,আমার সন্তানের উপস্থিতির হার কত?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+నేను ఎన్ని తరగతులకు హాజరయ్యాను?,OWN_ATTENDANCE,ദയവായി എന്റെ കുട്ടിയുടെ ഹാജർ എത്രയാണ്?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+என் வருகை சதவீதம் எவ்வளவு?,OWN_ATTENDANCE,রাহুলের অ্যাটেনডেন্স দেখতে পারবেন?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+माझी उपस्थिती तपासू शकता का?,OWN_ATTENDANCE,రాహుల్ అటెండెన్స్ చెక్ చేయగలరా?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+इस टर्म में मेरी उपस्थिति कितनी है?,OWN_ATTENDANCE,કૃપા કરીને મારા બાળકની હાજરી કેટલી છે?,CHILD_ATTENDANCE,OWN_ATTENDANCE__VS__CHILD_ATTENDANCE
+माझी उपस्थिती किती आहे?,OWN_ATTENDANCE,तुम्ही सांगू शकता का: गेल्या महिन्यात राहुलची उपस्थिती किती होती?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+আমার উপস্থিতি পরীক্ষা করে দিতে পারবেন?,OWN_ATTENDANCE,പറയാമോ: കഴിഞ്ഞ മാസം രാഹുലിന്റെ ഹാജർ എത്രയായിരുന്നു?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+എന്റെ ഹാജർ ശതമാനം എത്രയാണ്?,OWN_ATTENDANCE,இதை சரிபார்க்க முடியுமா: கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+براہ کرم میری حاضری کتنی ہے؟,OWN_ATTENDANCE,நீங்கள் சொல்ல முடியுமா: கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+ਮੇਰੀ ਹਾਜ਼ਰੀ ਕਿੰਨੀ ਹੈ?,OWN_ATTENDANCE,தயவுசெய்து கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+माझी उपस्थिती किती टक्के आहे?,OWN_ATTENDANCE,গত মাসে রাহুলের উপস্থিতি কত ছিল?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+నేను ఎన్ని తరగతులకు హాజరయ్యాను?,OWN_ATTENDANCE,എനിക്ക് ഇത് അറിയണം: കഴിഞ്ഞ മാസം രാഹുലിന്റെ ഹാജർ എത്രയായിരുന്നു?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+என் வருகை சதவீதம் எவ்வளவு?,OWN_ATTENDANCE,দয়া করে গত মাসে রাহুলের উপস্থিতি কত ছিল?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+माझी उपस्थिती तपासू शकता का?,OWN_ATTENDANCE,అతని ఇటీవలి హాజరును చూపించండి.,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+इस टर्म में मेरी उपस्थिति कितनी है?,OWN_ATTENDANCE,કૃપા કરીને કૃપા કરીને કૃપા કરીને ગયા મહિને રાહુલની હાજરી કેટલી હતી?,ATTENDANCE_HISTORY,OWN_ATTENDANCE__VS__ATTENDANCE_HISTORY
+माझ्या मुलाची उपस्थिती किती आहे?,CHILD_ATTENDANCE,तुम्ही सांगू शकता का: गेल्या महिन्यात राहुलची उपस्थिती किती होती?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+আমার ছেলের উপস্থিতি কেমন?,CHILD_ATTENDANCE,പറയാമോ: കഴിഞ്ഞ മാസം രാഹുലിന്റെ ഹാജർ എത്രയായിരുന്നു?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+രാഹുലിന്റെ ഹാജർ പരിശോധിക്കാമോ?,CHILD_ATTENDANCE,இதை சரிபார்க்க முடியுமா: கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+براہ کرم میرے بچے کی حاضری کتنی ہے؟,CHILD_ATTENDANCE,நீங்கள் சொல்ல முடியுமா: கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+ਮੇਰੇ ਬੱਚੇ ਦੀ ਹਾਜ਼ਰੀ ਕਿੰਨੀ ਹੈ?,CHILD_ATTENDANCE,தயவுசெய்து கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+राहुलची उपस्थिती तपासू शकता का?,CHILD_ATTENDANCE,গত মাসে রাহুলের উপস্থিতি কত ছিল?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+నా కుమారుడి అటెండెన్స్ ఎలా ఉంది?,CHILD_ATTENDANCE,എനിക്ക് ഇത് അറിയണം: കഴിഞ്ഞ മാസം രാഹുലിന്റെ ഹാജർ എത്രയായിരുന്നു?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+ராகுலின் வருகையை சரிபார்க்க முடியுமா?,CHILD_ATTENDANCE,দয়া করে গত মাসে রাহুলের উপস্থিতি কত ছিল?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+माझ्या मुलाची उपस्थिती कशी आहे?,CHILD_ATTENDANCE,అతని ఇటీవలి హాజరును చూపించండి.,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+मेरे बच्चे की उपस्थिति दिखाइए।,CHILD_ATTENDANCE,કૃપા કરીને કૃપા કરીને કૃપા કરીને ગયા મહિને રાહુલની હાજરી કેટલી હતી?,ATTENDANCE_HISTORY,CHILD_ATTENDANCE__VS__ATTENDANCE_HISTORY
+माझ्या मुलाची उपस्थिती किती आहे?,CHILD_ATTENDANCE,तुम्ही सांगू शकता का: संपूर्ण शाळेचा उपस्थिती अहवाल दाखवा.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+আমার ছেলের উপস্থিতি কেমন?,CHILD_ATTENDANCE,പറയാമോ: സ്കൂളിന്റെ മൊത്തം ഹാജർ റിപ്പോർട്ട് കാണിക്കൂ.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+രാഹുലിന്റെ ഹാജർ പരിശോധിക്കാമോ?,CHILD_ATTENDANCE,இதை சரிபார்க்க முடியுமா: முழு பள்ளியின் வருகை அறிக்கையை காட்டுங்கள்.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+براہ کرم میرے بچے کی حاضری کتنی ہے؟,CHILD_ATTENDANCE,நீங்கள் சொல்ல முடியுமா: முழு பள்ளியின் வருகை அறிக்கையை காட்டுங்கள்.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+ਮੇਰੇ ਬੱਚੇ ਦੀ ਹਾਜ਼ਰੀ ਕਿੰਨੀ ਹੈ?,CHILD_ATTENDANCE,தயவுசெய்து முழு பள்ளியின் வருகை அறிக்கையை காட்டுங்கள்.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+राहुलची उपस्थिती तपासू शकता का?,CHILD_ATTENDANCE,পুরো স্কুলের উপস্থিতির রিপোর্ট দেখান।,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+నా కుమారుడి అటెండెన్స్ ఎలా ఉంది?,CHILD_ATTENDANCE,എനിക്ക് ഇത് അറിയണം: സ്കൂളിന്റെ മൊത്തം ഹാജർ റിപ്പോർട്ട് കാണിക്കൂ.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+ராகுலின் வருகையை சரிபார்க்க முடியுமா?,CHILD_ATTENDANCE,দয়া করে পুরো স্কুলের উপস্থিতির রিপোর্ট দেখান।,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+माझ्या मुलाची उपस्थिती कशी आहे?,CHILD_ATTENDANCE,పాఠశాల మొత్తం అటెండెన్స్ ఎలా ఉంది?,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+मेरे बच्चे की उपस्थिति दिखाइए।,CHILD_ATTENDANCE,કૃપા કરીને કૃપા કરીને કૃપા કરીને આખી શાળાનો હાજરી અહેવાલ બતાવો.,SCHOOL_ANALYTICS,CHILD_ATTENDANCE__VS__SCHOOL_ANALYTICS
+माझी उपस्थिती किती आहे?,OWN_ATTENDANCE,तुम्ही सांगू शकता का: संपूर्ण शाळेचा उपस्थिती अहवाल दाखवा.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+আমার উপস্থিতি পরীক্ষা করে দিতে পারবেন?,OWN_ATTENDANCE,പറയാമോ: സ്കൂളിന്റെ മൊത്തം ഹാജർ റിപ്പോർട്ട് കാണിക്കൂ.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+എന്റെ ഹാജർ ശതമാനം എത്രയാണ്?,OWN_ATTENDANCE,இதை சரிபார்க்க முடியுமா: முழு பள்ளியின் வருகை அறிக்கையை காட்டுங்கள்.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+براہ کرم میری حاضری کتنی ہے؟,OWN_ATTENDANCE,நீங்கள் சொல்ல முடியுமா: முழு பள்ளியின் வருகை அறிக்கையை காட்டுங்கள்.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+ਮੇਰੀ ਹਾਜ਼ਰੀ ਕਿੰਨੀ ਹੈ?,OWN_ATTENDANCE,தயவுசெய்து முழு பள்ளியின் வருகை அறிக்கையை காட்டுங்கள்.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+माझी उपस्थिती किती टक्के आहे?,OWN_ATTENDANCE,পুরো স্কুলের উপস্থিতির রিপোর্ট দেখান।,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+నేను ఎన్ని తరగతులకు హాజరయ్యాను?,OWN_ATTENDANCE,എനിക്ക് ഇത് അറിയണം: സ്കൂളിന്റെ മൊത്തം ഹാജർ റിപ്പോർട്ട് കാണിക്കൂ.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+என் வருகை சதவீதம் எவ்வளவு?,OWN_ATTENDANCE,দয়া করে পুরো স্কুলের উপস্থিতির রিপোর্ট দেখান।,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+माझी उपस्थिती तपासू शकता का?,OWN_ATTENDANCE,పాఠశాల మొత్తం అటెండెన్స్ ఎలా ఉంది?,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+इस टर्म में मेरी उपस्थिति कितनी है?,OWN_ATTENDANCE,કૃપા કરીને કૃપા કરીને કૃપા કરીને આખી શાળાનો હાજરી અહેવાલ બતાવો.,SCHOOL_ANALYTICS,OWN_ATTENDANCE__VS__SCHOOL_ANALYTICS
+राहुलला आज अनुपस्थित म्हणून नोंदवा.,MARK_ATTENDANCE,तुम्ही सांगू शकता का: गेल्या महिन्यात राहुलची उपस्थिती किती होती?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+দয়া করে দয়া করে রাহুলকে আজ অনুপস্থিত হিসেবে নথিভুক্ত করুন।,MARK_ATTENDANCE,പറയാമോ: കഴിഞ്ഞ മാസം രാഹുലിന്റെ ഹാജർ എത്രയായിരുന്നു?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+ദയവായി രാഹുലിനെ ഇന്ന് ഹാജരാകാത്തതായി രേഖപ്പെടുത്തൂ.,MARK_ATTENDANCE,இதை சரிபார்க்க முடியுமா: கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+براہ کرم براہ کرم براہ کرم راہل کو آج غیر حاضر درج کریں۔,MARK_ATTENDANCE,நீங்கள் சொல்ல முடியுமா: கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+ਰਾਹੁਲ ਨੂੰ ਅੱਜ ਗੈਰਹਾਜ਼ਰ ਦਰਜ ਕਰੋ.,MARK_ATTENDANCE,தயவுசெய்து கடந்த மாதம் ராகுலின் வருகை எவ்வளவு?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+कृपया राहुलला आज अनुपस्थित म्हणून नोंदवा.,MARK_ATTENDANCE,গত মাসে রাহুলের উপস্থিতি কত ছিল?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+ఈరోజు రాహుల్ అటెండెన్స్‌ను గైర్హాజరుగా మార్చండి.,MARK_ATTENDANCE,എനിക്ക് ഇത് അറിയണം: കഴിഞ്ഞ മാസം രാഹുലിന്റെ ഹാജർ എത്രയായിരുന്നു?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+தயவுசெய்து ராகுலை இன்று வராதவர் என்று பதிவு செய்யுங்கள்.,MARK_ATTENDANCE,দয়া করে গত মাসে রাহুলের উপস্থিতি কত ছিল?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+तुम्ही सांगू शकता का: राहुलला आज अनुपस्थित म्हणून नोंदवा.,MARK_ATTENDANCE,అతని ఇటీవలి హాజరును చూపించండి.,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+इस छात्र को उपस्थित दर्ज करें।,MARK_ATTENDANCE,કૃપા કરીને કૃપા કરીને કૃપા કરીને ગયા મહિને રાહુલની હાજરી કેટલી હતી?,ATTENDANCE_HISTORY,MARK_ATTENDANCE__VS__ATTENDANCE_HISTORY
+उद्या राहुलचे वेळापत्रक काय आहे?,TIMETABLE,परीक्षेचे वेळापत्रक सांगा.,EXAM,TIMETABLE__VS__EXAM
+দয়া করে আগামীকাল রাহুলের ক্লাসের সময়সূচি কী?,TIMETABLE,പരീക്ഷയുടെ ടൈംടേബിൾ പറയൂ.,EXAM,TIMETABLE__VS__EXAM
+നാളെ എനിക്ക് ഏത് ക്ലാസുകളുണ്ട്?,TIMETABLE,தயவுசெய்து வரவிருக்கும் தேர்வுகள் என்ன?,EXAM,TIMETABLE__VS__EXAM
+براہ کرم کل راہل کا ٹائم ٹیبل کیا ہے؟,TIMETABLE,தேர்வு அட்டவணையை சொல்லுங்கள்.,EXAM,TIMETABLE__VS__EXAM
+ਕੱਲ੍ਹ ਰਾਹੁਲ ਦਾ ਟਾਈਮਟੇਬਲ ਕੀ ਹੈ?,TIMETABLE,வரவிருக்கும் தேர்வுகள் என்ன?,EXAM,TIMETABLE__VS__EXAM
+उद्या माझे कोणते वर्ग आहेत?,TIMETABLE,আমার গণিত পরীক্ষা কবে?,EXAM,TIMETABLE__VS__EXAM
+తదుపరి మ్యాథ్స్ క్లాస్ ఎప్పుడు ఉంది?,TIMETABLE,ദയവായി എന്റെ ഗണിത പരീക്ഷ എപ്പോഴാണ്?,EXAM,TIMETABLE__VS__EXAM
+எனக்கு நாளை என்ன வகுப்புகள் உள்ளன?,TIMETABLE,আসন্ন পরীক্ষা কী কী?,EXAM,TIMETABLE__VS__EXAM
+माझे वेळापत्रक दाखवा.,TIMETABLE,రాబోయే పరీక్షలు ఏవి?,EXAM,TIMETABLE__VS__EXAM
+तीसरे पीरियड में कौन सा विषय है?,TIMETABLE,કૃપા કરીને મારી ગણિતની પરીક્ષા ક્યારે છે?,EXAM,TIMETABLE__VS__EXAM
+राहुलने असाइनमेंट जमा केले आहे का?,ASSIGNMENT,तुम्ही सांगू शकता का: राहुलची शैक्षणिक प्रगती कशी आहे?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+দয়া করে দয়া করে রাহুল কি তার অ্যাসাইনমেন্ট জমা দিয়েছে?,ASSIGNMENT,പറയാമോ: രാഹുലിന്റെ പഠന പുരോഗതി എങ്ങനെയാണ്?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+ദയവായി രാഹുൽ അസൈൻമെന്റ് സമർപ്പിച്ചോ?,ASSIGNMENT,இதை சரிபார்க்க முடியுமா: ராஹுலின் படிப்பு முன்னேற்றம் எப்படி உள்ளது?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+براہ کرم براہ کرم براہ کرم کیا راہل نے اپنا اسائنمنٹ جمع کرایا ہے؟,ASSIGNMENT,நீங்கள் சொல்ல முடியுமா: ராஹுலின் படிப்பு முன்னேற்றம் எப்படி உள்ளது?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+ਕੀ ਰਾਹੁਲ ਨੇ ਆਪਣਾ ਅਸਾਈਨਮੈਂਟ ਜਮ੍ਹਾਂ ਕੀਤਾ ਹੈ?,ASSIGNMENT,தயவுசெய்து ராஹுலின் படிப்பு முன்னேற்றம் எப்படி உள்ளது?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+कृपया राहुलने असाइनमेंट जमा केले आहे का?,ASSIGNMENT,রাহুলের পড়াশোনার অগ্রগতি কেমন?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+నా పిల్లవాడు హోమ్‌వర్క్ సమర్పించాడా?,ASSIGNMENT,എനിക്ക് ഇത് അറിയണം: രാഹുലിന്റെ പഠന പുരോഗതി എങ്ങനെയാണ്?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+தயவுசெய்து ராகுல் தனது பணியை சமர்ப்பித்தாரா?,ASSIGNMENT,দয়া করে রাহুলের পড়াশোনার অগ্রগতি কেমন?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+तुम्ही सांगू शकता का: राहुलने असाइनमेंट जमा केले आहे का?,ASSIGNMENT,నా గ్రేడ్‌లను చూపించండి.,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+कौन से असाइनमेंट जमा करने हैं?,ASSIGNMENT,કૃપા કરીને કૃપા કરીને કૃપા કરીને રાહુલની શૈક્ષણિક પ્રગતિ કેવી છે?,ACADEMIC_PERFORMANCE,ASSIGNMENT__VS__ACADEMIC_PERFORMANCE
+माझ्या मुलाच्या फीची स्थिती दाखवा.,FEES,तुम्ही सांगू शकता का: मी राहुलसाठी उद्याची रजा मागू शकतो का?,LEAVE,FEES__VS__LEAVE
+দয়া করে দয়া করে আমার সন্তানের ফি-এর অবস্থা দেখান।,FEES,പറയാമോ: രാഹുലിന് നാളെ അവധി ചോദിക്കാമോ?,LEAVE,FEES__VS__LEAVE
+ദയവായി എന്റെ കുട്ടിയുടെ ഫീസ് നില കാണിക്കൂ.,FEES,இதை சரிபார்க்க முடியுமா: ராகுலுக்கு நாளை விடுப்பு கேட்கலாமா?,LEAVE,FEES__VS__LEAVE
+براہ کرم براہ کرم براہ کرم میرے بچے کی فیس کی صورتحال دکھائیں۔,FEES,நீங்கள் சொல்ல முடியுமா: ராகுலுக்கு நாளை விடுப்பு கேட்கலாமா?,LEAVE,FEES__VS__LEAVE
+ਮੇਰੇ ਬੱਚੇ ਦੀ ਫੀਸ ਦੀ ਸਥਿਤੀ ਦਿਖਾਓ.,FEES,தயவுசெய்து ராகுலுக்கு நாளை விடுப்பு கேட்கலாமா?,LEAVE,FEES__VS__LEAVE
+कृपया माझ्या मुलाच्या फीची स्थिती दाखवा.,FEES,রাহুলের জন্য আগামীকালের ছুটি চাইতে পারি?,LEAVE,FEES__VS__LEAVE
+తదుపరి ఫీజు ఎప్పుడు చెల్లించాలి?,FEES,എനിക്ക് ഇത് അറിയണം: രാഹുലിന് നാളെ അവധി ചോദിക്കാമോ?,LEAVE,FEES__VS__LEAVE
+தயவுசெய்து என் குழந்தையின் கட்டண நிலையை காட்டுங்கள்.,FEES,দয়া করে রাহুলের জন্য আগামীকালের ছুটি চাইতে পারি?,LEAVE,FEES__VS__LEAVE
+तुम्ही सांगू शकता का: माझ्या मुलाच्या फीची स्थिती दाखवा.,FEES,పాఠశాల సెలవు విధానం ఏమిటి?,LEAVE,FEES__VS__LEAVE
+बकाया फीस कितनी है?,FEES,કૃપા કરીને કૃપા કરીને કૃપા કરીને શું હું રાહુલ માટે કાલની રજા માંગી શકું?,LEAVE,FEES__VS__LEAVE
+तुम्ही मला कशी मदत करू शकता?,GENERAL_HELP,तुम्ही सांगू शकता का: माझा कॉलेज असाइनमेंट लिहा.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+দয়া করে দয়া করে আপনি কীভাবে আমাকে সাহায্য করতে পারেন?,GENERAL_HELP,പറയാമോ: എന്റെ കോളേജ് അസൈൻമെന്റ് എഴുതൂ.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+ദയവായി നിങ്ങൾക്ക് എന്നെ എങ്ങനെ സഹായിക്കാം?,GENERAL_HELP,இதை சரிபார்க்க முடியுமா: என் கல்லூரி பணியை எழுதுங்கள்.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+براہ کرم براہ کرم براہ کرم آپ میری کیسے مدد کر سکتے ہیں؟,GENERAL_HELP,நீங்கள் சொல்ல முடியுமா: என் கல்லூரி பணியை எழுதுங்கள்.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+ਤੁਸੀਂ ਮੇਰੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦੇ ਹੋ?,GENERAL_HELP,தயவுசெய்து என் கல்லூரி பணியை எழுதுங்கள்.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+कृपया तुम्ही मला कशी मदत करू शकता?,GENERAL_HELP,আমার কলেজের অ্যাসাইনমেন্ট লিখে দিন।,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+మీరు ఏ సేవలు అందించగలరు?,GENERAL_HELP,എനിക്ക് ഇത് അറിയണം: എന്റെ കോളേജ് അസൈൻമെന്റ് എഴുതൂ.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+தயவுசெய்து நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,দয়া করে আমার কলেজের অ্যাসাইনমেন্ট লিখে দিন।,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+तुम्ही सांगू शकता का: तुम्ही मला कशी मदत करू शकता?,GENERAL_HELP,ఆపిల్ షేర్ ధర ఎంత?,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+मैं आपसे क्या पूछ सकता हूँ?,GENERAL_HELP,કૃપા કરીને કૃપા કરીને કૃપા કરીને મારો કોલેજ અસાઇનમેન્ટ લખો.,OUT_OF_SCOPE,GENERAL_HELP__VS__OUT_OF_SCOPE
+शाळेच्या अलीकडील घोषणा दाखवा.,ANNOUNCEMENT,तुम्ही सांगू शकता का: तुम्ही मला कशी मदत करू शकता?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+দয়া করে দয়া করে স্কুলের সাম্প্রতিক ঘোষণা দেখান।,ANNOUNCEMENT,പറയാമോ: നിങ്ങൾക്ക് എന്നെ എങ്ങനെ സഹായിക്കാം?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+ദയവായി സ്കൂളിന്റെ പുതിയ അറിയിപ്പുകൾ കാണിക്കൂ.,ANNOUNCEMENT,இதை சரிபார்க்க முடியுமா: நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+براہ کرم براہ کرم براہ کرم اسکول کی حالیہ اعلانات دکھائیں۔,ANNOUNCEMENT,நீங்கள் சொல்ல முடியுமா: நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+ਸਕੂਲ ਦੀਆਂ ਹਾਲੀਆ ਘੋਸ਼ਣਾਵਾਂ ਦਿਖਾਓ.,ANNOUNCEMENT,தயவுசெய்து நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+कृपया शाळेच्या अलीकडील घोषणा दाखवा.,ANNOUNCEMENT,আপনি কীভাবে আমাকে সাহায্য করতে পারেন?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+ఏదైనా ముఖ్యమైన స్కూల్ అప్‌డేట్ ఉందా?,ANNOUNCEMENT,എനിക്ക് ഇത് അറിയണം: നിങ്ങൾക്ക് എന്നെ എങ്ങനെ സഹായിക്കാം?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+தயவுசெய்து பள்ளியின் சமீபத்திய அறிவிப்புகளை காட்டுங்கள்.,ANNOUNCEMENT,দয়া করে আপনি কীভাবে আমাকে সাহায্য করতে পারেন?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+तुम्ही सांगू शकता का: शाळेच्या अलीकडील घोषणा दाखवा.,ANNOUNCEMENT,ఈ అసిస్టెంట్ ఎలా పనిచేస్తుంది?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+क्या स्कूल ने कोई नया नोटिस जारी किया है?,ANNOUNCEMENT,કૃપા કરીને કૃપા કરીને કૃપા કરીને તમે મને કેવી રીતે મદદ કરી શકો?,GENERAL_HELP,ANNOUNCEMENT__VS__GENERAL_HELP
+मला माझ्या मुलाच्या शिक्षकांशी बोलायचे आहे.,ESCALATION,तुम्ही सांगू शकता का: तुम्ही मला कशी मदत करू शकता?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+আমাকে স্কুল কর্তৃপক্ষের সঙ্গে যোগাযোগ করতে হবে।,ESCALATION,പറയാമോ: നിങ്ങൾക്ക് എന്നെ എങ്ങനെ സഹായിക്കാം?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+എന്നെ അധ്യാപകനുമായി ബന്ധിപ്പിക്കൂ.,ESCALATION,இதை சரிபார்க்க முடியுமா: நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+براہ کرم میں اپنے بچے کے استاد سے بات کرنا چاہتا ہوں۔,ESCALATION,நீங்கள் சொல்ல முடியுமா: நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+ਮੈਂ ਆਪਣੇ ਬੱਚੇ ਦੇ ਅਧਿਆਪਕ ਨਾਲ ਗੱਲ ਕਰਨੀ ਹੈ।,ESCALATION,தயவுசெய்து நீங்கள் எனக்கு எப்படி உதவ முடியும்?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+मला शिक्षकांशी जोडून द्या.,ESCALATION,আপনি কীভাবে আমাকে সাহায্য করতে পারেন?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+టీచర్ నుండి కాల్ కోసం అభ్యర్థన చేయండి.,ESCALATION,എനിക്ക് ഇത് അറിയണം: നിങ്ങൾക്ക് എന്നെ എങ്ങനെ സഹായിക്കാം?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+என்னை ஆசிரியருடன் இணைக்கவும்.,ESCALATION,দয়া করে আপনি কীভাবে আমাকে সাহায্য করতে পারেন?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+मला शाळेच्या व्यवस्थापनाशी संपर्क साधायचा आहे.,ESCALATION,ఈ అసిస్టెంట్ ఎలా పనిచేస్తుంది?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP
+"मैं संतुष्ट नहीं हूँ, मुझे किसी व्यक्ति से बात करनी है।",ESCALATION,કૃપા કરીને કૃપા કરીને કૃપા કરીને તમે મને કેવી રીતે મદદ કરી શકો?,GENERAL_HELP,ESCALATION__VS__GENERAL_HELP

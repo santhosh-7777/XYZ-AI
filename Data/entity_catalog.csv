@@ -1,0 +1,10 @@
+﻿entity,meaning,example,type
+PERSON,student/child/teacher name,Rahul,ENTITY
+DATE,specific or relative date,today / tomorrow / 2026-08-20,ENTITY
+DATE_RANGE,period,last month / this term,ENTITY
+STATUS,attendance state,absent / present,ENTITY
+SUBJECT,academic subject,Mathematics,ENTITY
+CLASS,class/section,10-A,ENTITY
+CHILD,authorized child reference,my daughter / Rahul,RESOLUTION
+REQUEST_TYPE,support target,teacher / management,ENTITY
+LANGUAGE,requested response language,Hindi,CONTROL

@@ -1,0 +1,22 @@
+﻿assessment_area,implementation_target,data_or_contract,covered
+Authentication,JWT/session identity,rbac_policy.csv,YES
+Authorization,Application/tool RBAC,rbac_policy.csv,YES
+Intent ML,XLM-R intent classification,intent_ml_train.csv,YES
+Entity extraction,Structured entity extraction,entity_extraction_gold.csv,YES
+Language,11-language intent/evaluation,intent_ml_master.csv,YES
+Hard negatives,Confusable intent pairs,hard_negative_pairs.csv,YES
+Conversation memory,Follow-up/correction cases,conversation_context_cases.csv,YES
+Persona,Role-specific tone,persona_catalog.csv,YES
+Tool calling,Strict tool contracts,tool_catalog.csv,YES
+Mock APIs,Success/failure behavior,mock_api_contract_tests.csv,YES
+Action safety,Confirmation before mutations,action_confirmation_cases.csv,YES
+Escalation,Teacher/management request workflow,action_confirmation_cases.csv,YES
+Voice,Voice-like multilingual utterances,multilingual_code_mixed_voice_eval.csv,YES
+Avatar,Presentation layer; no separate training corpus required,README,YES
+Prompt injection,Adversarial security cases,prompt_injection_security_cases.csv,YES
+System prompt extraction,Security cases,prompt_injection_security_cases.csv,YES
+Credential extraction,Security cases,prompt_injection_security_cases.csv,YES
+Fake role claims,RBAC/security cases,rbac_policy.csv,YES
+Unauthorized data access,RBAC/resource policy,rbac_policy.csv,YES
+Out of scope,Refusal/intent class,intent_ml_master.csv,YES
+Evaluation,Per-language/per-intent metrics,intent_ml_test.csv,YES

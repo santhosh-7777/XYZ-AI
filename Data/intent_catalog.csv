@@ -1,0 +1,17 @@
+﻿intent,description,tool,security_class
+OWN_ATTENDANCE,View authenticated student's own attendance,get_my_attendance,READ
+CHILD_ATTENDANCE,View attendance of an authorized child,get_child_attendance,READ
+ATTENDANCE_HISTORY,View attendance over a period,get_attendance_history,READ
+MARK_ATTENDANCE,Mark/update attendance,mark_attendance,ACTION
+SCHOOL_ANALYTICS,View school-wide attendance/analytics,get_school_analytics,READ
+TIMETABLE,View class timetable,get_timetable,READ
+EXAM,View exam schedule/results,get_exams,READ
+ASSIGNMENT,View assignment/homework information,get_assignments,READ
+ACADEMIC_PERFORMANCE,View academic performance,get_academic_performance,READ
+FEES,View fee status,get_fees,READ
+LEAVE,View/request leave,leave_service,ACTION
+ANNOUNCEMENT,View school announcements,get_announcements,READ
+ESCALATION,Request human support,create_escalation_request,ACTION
+GENERAL_HELP,Ask what XYZ AI can do,none,READ
+GREETING,Greeting/small conversational opener,none,READ
+OUT_OF_SCOPE,Non-school or unsafe request,blocked,BLOCK

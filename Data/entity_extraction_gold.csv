@@ -1,0 +1,7 @@
+﻿utterance,expected_entities
+Mark Rahul absent today.,"{""PERSON"": ""Rahul"", ""DATE"": ""today"", ""STATUS"": ""absent""}"
+Mark Ananya present tomorrow.,"{""PERSON"": ""Ananya"", ""DATE"": ""tomorrow"", ""STATUS"": ""present""}"
+How was Rahul's attendance last month?,"{""PERSON"": ""Rahul"", ""DATE_RANGE"": ""last month""}"
+Check my child's attendance.,"{""CHILD"": ""my child""}"
+I want to talk to Rahul's teacher.,"{""PERSON"": ""Rahul"", ""REQUEST_TYPE"": ""teacher""}"
+Please contact school management.,"{""REQUEST_TYPE"": ""management""}"

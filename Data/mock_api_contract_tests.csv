@@ -1,0 +1,8 @@
+﻿tool,mock_result,http_status,required_response_field
+get_my_attendance,SUCCESS,200,attendance_percentage
+get_child_attendance,SUCCESS,200,attendance_percentage
+mark_attendance,SUCCESS,200,operation_id
+mark_attendance,VALIDATION_ERROR,422,error
+get_school_analytics,SUCCESS,200,overall_attendance
+create_escalation_request,SUCCESS,201,request_id
+create_escalation_request,SERVICE_FAILURE,503,error

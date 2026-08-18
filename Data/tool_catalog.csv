@@ -1,0 +1,14 @@
+﻿tool,method,purpose,roles,requires_confirmation
+get_my_attendance,GET,Own attendance,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+get_child_attendance,GET,Authorized child attendance,PARENT|TEACHER|PRINCIPAL,False
+get_attendance_history,GET,Attendance history for authorized resource,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+mark_attendance,POST,Create/update attendance,TEACHER,True
+get_school_analytics,GET,School-level analytics,PRINCIPAL,False
+get_timetable,GET,Timetable,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+get_exams,GET,Exam schedule/results,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+get_assignments,GET,Assignments/homework,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+get_academic_performance,GET,Academic performance,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+get_fees,GET,Fee information,PARENT|STUDENT|PRINCIPAL,False
+leave_service,POST/GET,Leave information/request,STUDENT|PARENT,True
+get_announcements,GET,School announcements,STUDENT|PARENT|TEACHER|PRINCIPAL,False
+create_escalation_request,POST,Teacher/management support request,STUDENT|PARENT|TEACHER|PRINCIPAL,True

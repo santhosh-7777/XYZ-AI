@@ -1,0 +1,6 @@
+﻿role,utterance,intent,expected_flow
+Teacher,Mark Rahul absent today.,MARK_ATTENDANCE,CONFIRM_BEFORE_TOOL
+Teacher,"Yes, mark him absent.",MARK_ATTENDANCE,EXECUTE_IF_PERMISSION_OK
+Parent,I want to talk to my child's teacher.,ESCALATION,CONFIRM_BEFORE_TOOL
+Parent,"Yes, request the call.",ESCALATION,EXECUTE_IF_PERMISSION_OK
+Student,Apply leave for tomorrow.,LEAVE,CONFIRM_BEFORE_TOOL

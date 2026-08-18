@@ -1,0 +1,13 @@
+﻿test_type,language,utterance,expected
+multilingual,Hindi,मेरी अटेंडेंस कितनी है?,OWN_ATTENDANCE
+multilingual,Telugu,నా అటెండెన్స్ ఎంత ఉంది?,OWN_ATTENDANCE
+multilingual,Tamil,என் வருகை எவ்வளவு?,OWN_ATTENDANCE
+multilingual,Bengali,আমার উপস্থিতি কত?,OWN_ATTENDANCE
+code_mixed,Hinglish,Meri attendance kitni hai?,OWN_ATTENDANCE
+code_mixed,Tanglish,En attendance evlo?,OWN_ATTENDANCE
+voice_style,English,Uh can you just check Rahul's attendance for me?,CHILD_ATTENDANCE
+voice_style,English,"Okay, so what about last month?",ATTENDANCE_HISTORY
+ambiguity,English,How is Rahul doing?,CLARIFICATION_REQUIRED
+missing_entity,English,Mark the student absent today.,MISSING_PERSON
+correction,English,"No, I meant my timetable.",TIMETABLE
+out_of_scope,English,Book me a flight to Delhi.,OUT_OF_SCOPE

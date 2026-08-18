@@ -1,0 +1,13 @@
+﻿role,user_message,expected_intent,context_requirement,expected_tool
+Parent,How much attendance does my child have?,CHILD_ATTENDANCE,Rahul,get_child_attendance
+Parent,How about last month?,ATTENDANCE_HISTORY,Rahul + previous child context,get_attendance_history
+Student,What's my attendance?,OWN_ATTENDANCE,authenticated student,get_my_attendance
+Student,What about last month?,ATTENDANCE_HISTORY,same student + previous attendance context,get_attendance_history
+Teacher,Mark Rahul absent today.,MARK_ATTENDANCE,"Rahul, today, absent",mark_attendance
+Principal,What's the overall attendance?,SCHOOL_ANALYTICS,school-wide,get_school_analytics
+Parent,I'm not satisfied. I want to talk to Rahul's teacher.,ESCALATION,teacher escalation,create_escalation_request
+Parent,"Yes, request the call.",ESCALATION,confirmation from previous turn,create_escalation_request
+Parent,How is Rahul doing?,CLARIFICATION_REQUIRED,Rahul; attendance/academics/assignments ambiguous,none
+Student,My attendance?,CLARIFICATION_REQUIRED,student context exists but request can be clarified,none
+Student,Can you check it?,CONTEXT_REQUIRED,previous entity/tool context required,none
+Student,"No, I meant my timetable.",TIMETABLE,corrected intent,get_timetable
