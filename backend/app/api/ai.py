@@ -87,6 +87,7 @@ def act_on_message(
     data: UnderstandRequest,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
+    is_voice: bool = False,
 ):
     """
     Main AI orchestration endpoint.
@@ -150,14 +151,61 @@ def act_on_message(
     )
 
     if confirmation is not None:
+
+        # =====================================================
+        # VOICE CONFIRMATION
+        # =====================================================
+
+        if is_voice:
+
+            action_id = confirmation["action_id"]
+            action = ConfirmationService.consume_pending_action(
+                action_id=action_id,
+                user_id=user.id,
+            )
+
+            if action is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=(
+                        "Confirmation is invalid, expired, "
+                        "or already used."
+                    ),
+                )
+
+            result = execute_pending_action(
+                action=action,
+                user=user,
+                db=db,
+            )
+
+            ConversationManager.clear_pending_action(
+                user.id
+            )
+
+            message = PersonaService.format_response(
+                role=role_name,
+                intent=action.intent,
+                result=result,
+                language=data.language or "en",
+            )
+
+            return ActResponse(
+                intent=action.intent,
+                entities=action.arguments,
+                result={
+                    **result,
+                    "message": message,
+                },
+            )
+
+        # =====================================================
+        # NORMAL TEXT CONFIRMATION
+        # =====================================================
+
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                "Confirmation detected. "
-                "Please confirm the pending action using "
-                f"/ai/confirm with action_id "
-                f"'{confirmation['action_id']}'."
-            ),
+            detail="Confirmation detected. Please confirm the pending action.",
         )
 
     # ---------------------------------------------------------
@@ -1169,7 +1217,38 @@ def act_on_message(
 # =========================================================
 # /ai/confirm
 # =========================================================
+def execute_pending_action(
+    action,
+    user: User,
+    db: Session,
+):
+    """
+    Execute a previously confirmed state-changing action.
 
+    This function is intentionally separate from /ai/confirm
+    so the same execution logic can be reused by text and voice
+    confirmation flows.
+    """
+
+    if action.tool == "mark_attendance":
+        return AttendanceTool.mark_attendance(
+            teacher_user_id=user.id,
+            student_id=action.arguments["student_id"],
+            student_name=action.arguments["student_name"],
+            date=action.arguments["date"],
+            status=action.arguments["status"],
+        )
+
+    if action.tool == "create_escalation_request":
+        return EscalationTool.create_request(
+            user_id=user.id,
+            target=action.arguments["target"],
+        )
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail=f"Unsupported confirmation tool: {action.tool}",
+    )
 
 @router.post(
     "/confirm",
@@ -1181,16 +1260,10 @@ def confirm_action(
     db: Session = Depends(get_db),
 ):
     """
-    Confirm and execute a previously approved
-    state-changing action.
-
-    ConfirmationService guarantees:
-
-    - action belongs to authenticated user
-    - action has not expired
-    - action can only be consumed once
+    Confirm and execute a previously approved state-changing action.
     """
 
+    # 1. Consume the pending action.
     action = ConfirmationService.consume_pending_action(
         action_id=data.action_id,
         user_id=user.id,
@@ -1205,66 +1278,23 @@ def confirm_action(
             ),
         )
 
-    # =========================================================
-    # MARK ATTENDANCE
-    # =========================================================
+    # 2. Execute the confirmed action.
+    result = execute_pending_action(
+        action=action,
+        user=user,
+        db=db,
+    )
 
-    if action.tool == "mark_attendance":
+    # 3. Clear pending conversation state.
+    ConversationManager.clear_pending_action(user.id)
 
-        result = AttendanceTool.mark_attendance(
-            teacher_user_id=user.id,
-            student_id=action.arguments["student_id"],
-            student_name=action.arguments["student_name"],
-            date=action.arguments["date"],
-            status=action.arguments["status"],
-        )
-
-        ConversationManager.clear_pending_action(
-            user.id
-        )
-
-        return ConfirmationResponse(
-            confirmed=True,
-            action_id=action.action_id,
-            intent=action.intent,
-            result=result,
-        )
-
-   
-    # =========================================================
-    # ESCALATION
-    # =========================================================
-
-    if action.tool == "create_escalation_request":
-
-        result = EscalationTool.create_request(
-            user_id=user.id,
-            target=action.arguments["target"],
-        )
-
-        role = db.get(Role, user.role_id)
-        role_name = role.name.upper() if role else "STUDENT"
-
-        message = PersonaService.format_response(
-            role=role_name,
-            intent=action.intent,
-            result=result,
-            language="en",
-        )
-
-        ConversationManager.clear_pending_action(
-            user.id
-        )
-
-        return ConfirmationResponse(
-            confirmed=True,
-            action_id=action.action_id,
-            intent=action.intent,
-            result={
-                **result,
-                "message": message,
-            },
-        )
+    # 4. Return the actual tool result.
+    return ConfirmationResponse(
+        confirmed=True,
+        action_id=action.action_id,
+        intent=action.intent,
+        result=result,
+    )
 
     # =========================================================
     # UNSUPPORTED CONFIRMATION TOOL

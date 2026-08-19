@@ -141,6 +141,7 @@ def process_voice(
                 data=request,
                 user=user,
                 db=db,
+                is_voice=True,
             )
 
             return response.model_dump()

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from faster_whisper import WhisperModel
 
 from backend.app.voice.stt.base import STTProvider
@@ -5,12 +7,13 @@ from backend.app.voice.stt.base import STTProvider
 
 class FasterWhisperSTTProvider(STTProvider):
     """
-    Real offline speech-to-text provider using Faster Whisper.
+    High-accuracy multilingual speech-to-text provider.
 
-    The model is loaded lazily on the first transcription request
-    so application startup is not blocked.
+    Uses Faster-Whisper large-v3 for:
+        audio -> transcription + automatic language detection
 
-    Faster Whisper automatically detects the spoken language.
+    The provider interface remains unchanged so the rest of the
+    XYZ-AI voice pipeline does not need to change.
     """
 
     def __init__(self) -> None:
@@ -28,20 +31,29 @@ class FasterWhisperSTTProvider(STTProvider):
 
     def transcribe(self, audio_path: str) -> dict[str, str]:
         """
-        Convert audio to text and detect the spoken language.
+        Convert audio to text and automatically detect language.
 
         Returns:
             {
                 "text": "...",
-                "language": "en"
+                "language": "te"
             }
         """
 
         model = self._get_model()
 
-        segments, info = model.transcribe(audio_path)
+        segments, info = model.transcribe(
+            audio_path,
+            beam_size=5,
+            vad_filter=True,
+            condition_on_previous_text=True,
+        )
 
-        text = "".join(segment.text for segment in segments).strip()
+        text = " ".join(
+            segment.text.strip()
+            for segment in segments
+            if segment.text.strip()
+        ).strip()
 
         language = info.language
 
