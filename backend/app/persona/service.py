@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from backend.app.llm.response_generator import ResponseGenerator
+
 
 PERSONA_CATALOG: dict[str, dict[str, Any]] = {
     "STUDENT": {
@@ -28,11 +30,18 @@ PERSONA_CATALOG: dict[str, dict[str, Any]] = {
 
 
 class PersonaService:
-    """Role-specific response presentation layer.
-
-    This layer does not perform authorization or tool execution.
-    It only converts structured results into role-appropriate responses.
     """
+    Role-specific response presentation layer.
+
+    Authorization and tool execution remain outside this class.
+
+    Grok is used only to turn VERIFIED backend results into
+    natural, role-aware, multilingual responses.
+
+    Existing deterministic responses remain as a fallback.
+    """
+
+    _llm: ResponseGenerator | None = None
 
     @staticmethod
     def get_persona(role: str) -> dict[str, Any]:
@@ -45,21 +54,161 @@ class PersonaService:
 
         return persona
 
-    @staticmethod
-    def format_response(
+    @classmethod
+    def _get_llm(cls) -> ResponseGenerator:
+        """
+        Lazily create the LLM client.
+
+        This prevents the backend from failing during startup
+        if the API key is temporarily unavailable.
+        """
+
+        if cls._llm is None:
+            cls._llm = ResponseGenerator()
+
+        return cls._llm
+
+    @classmethod
+    def _generate_llm_response(
+        cls,
         role: str,
         intent: str,
         result: dict[str, Any],
+        language: str,
+    ) -> str | None:
+        """
+        Try to generate a natural multilingual response.
+
+        Returns None if Grok is unavailable so that the
+        deterministic fallback can still answer the request.
+        """
+
+        try:
+            return cls._get_llm().generate(
+                role=role,
+                language=language,
+                intent=intent,
+                result=result,
+            )
+        except Exception:
+            return None
+
+    @classmethod
+    def format_response(
+        cls,
+        role: str,
+        intent: str,
+        result: dict[str, Any],
+        language: str = "en",
     ) -> str:
-        """Format a result according to the user's role and intent."""
+        """Format a result according to role, intent and language."""
 
         role = role.upper()
         intent = intent.upper()
+        language = language.lower().strip()
 
-        PersonaService.get_persona(role)
+        cls.get_persona(role)
 
         # =====================================================
-        # GREETING
+        # SECURITY-SENSITIVE / CONTROL FLOW RESPONSES
+        # Keep these deterministic.
+        # =====================================================
+
+        if intent == "CONTEXT_REQUIRED":
+            return result.get(
+                "message",
+                "I need a little more context. "
+                "What would you like me to check?",
+            )
+
+        if intent == "CLARIFICATION_REQUIRED":
+            return result.get(
+                "message",
+                "Could you provide a little more information "
+                "so I can help you?",
+            )
+
+        if intent == "CONFIRMATION_REQUIRED":
+            return result.get(
+                "message",
+                "Please confirm this action.",
+            )
+
+        if intent == "ESCALATION":
+            if result.get("status") == "CONFIRMATION_REQUIRED":
+                return result.get(
+                    "message",
+                    "Please confirm the escalation request.",
+                )
+
+            if result.get("status") == "SUBMITTED":
+                request_id = result.get("request_id")
+
+                if request_id:
+                    return (
+                        "Your escalation request has been submitted. "
+                        f"Request ID: {request_id}."
+                    )
+
+                return (
+                    "Your escalation request has been submitted."
+                )
+
+        if intent == "MARK_ATTENDANCE":
+            if result.get("status") == "CONFIRMATION_REQUIRED":
+                return result.get(
+                    "message",
+                    "Please confirm this attendance update.",
+                )
+
+            student_name = result.get(
+                "student_name",
+                "The student",
+            )
+
+            attendance_status = result.get(
+                "status",
+                "",
+            ).lower()
+
+            attendance_date = result.get(
+                "date",
+                "the requested date",
+            )
+
+            # Only allow Grok to phrase a confirmed action.
+            llm_response = cls._generate_llm_response(
+                role=role,
+                intent=intent,
+                result=result,
+                language=language,
+            )
+
+            if llm_response:
+                return llm_response
+
+            return (
+                f"{student_name} was marked "
+                f"{attendance_status} "
+                f"on {attendance_date}."
+            )
+
+        # =====================================================
+        # SAFE NATURAL-LANGUAGE RESPONSES
+        # =====================================================
+
+        llm_response = cls._generate_llm_response(
+            role=role,
+            intent=intent,
+            result=result,
+            language=language,
+        )
+
+        if llm_response:
+            return llm_response
+
+        # =====================================================
+        # DETERMINISTIC FALLBACKS
         # =====================================================
 
         if intent == "GREETING":
@@ -92,10 +241,6 @@ class PersonaService:
                     "and management requests. How may I help?"
                 )
 
-        # =====================================================
-        # GENERAL HELP
-        # =====================================================
-
         if intent == "GENERAL_HELP":
             if role == "STUDENT":
                 return (
@@ -127,42 +272,12 @@ class PersonaService:
                     "management support."
                 )
 
-        # =====================================================
-        # OUT OF SCOPE
-        # =====================================================
-
         if intent == "OUT_OF_SCOPE":
             return (
                 "I'm XYZ-AI, your school assistant. "
                 "I can help with school-related information "
                 "and support, but I can't help with that request."
             )
-
-        # =====================================================
-        # CONTEXT REQUIRED
-        # =====================================================
-
-        if intent == "CONTEXT_REQUIRED":
-            return result.get(
-                "message",
-                "I need a little more context. "
-                "What would you like me to check?",
-            )
-
-        # =====================================================
-        # CLARIFICATION REQUIRED
-        # =====================================================
-
-        if intent == "CLARIFICATION_REQUIRED":
-            return result.get(
-                "message",
-                "Could you provide a little more information "
-                "so I can help you?",
-            )
-
-        # =====================================================
-        # OWN ATTENDANCE
-        # =====================================================
 
         if intent == "OWN_ATTENDANCE":
             percentage = result.get("attendance_percentage")
@@ -176,15 +291,12 @@ class PersonaService:
 
                 return f"Your current attendance is {percentage}%."
 
-        # =====================================================
-        # CHILD ATTENDANCE
-        # =====================================================
-
         if intent == "CHILD_ATTENDANCE":
             student_name = result.get(
                 "student_name",
                 "Your child",
             )
+
             percentage = result.get("attendance_percentage")
 
             if percentage is not None:
@@ -193,19 +305,17 @@ class PersonaService:
                     f"{percentage}% attendance."
                 )
 
-        # =====================================================
-        # ATTENDANCE HISTORY
-        # =====================================================
-
         if intent == "ATTENDANCE_HISTORY":
             student_name = result.get(
                 "student_name",
                 "The student",
             )
+
             period = result.get(
                 "period",
                 "the requested period",
             )
+
             percentage = result.get("attendance_percentage")
 
             if percentage is not None:
@@ -215,10 +325,6 @@ class PersonaService:
                     f"{student_name}'s attendance for "
                     f"{formatted_period} was {percentage}%."
                 )
-
-        # =====================================================
-        # TIMETABLE
-        # =====================================================
 
         if intent == "TIMETABLE":
             timetable = result.get("timetable", [])
@@ -230,14 +336,17 @@ class PersonaService:
 
             for item in timetable:
                 period = item.get("period", "")
+
                 subject = item.get(
                     "subject",
                     "Unknown subject",
                 )
+
                 teacher = item.get(
                     "teacher",
                     "Unknown teacher",
                 )
+
                 time = item.get("time", "")
 
                 lines.append(
@@ -250,42 +359,6 @@ class PersonaService:
                 "Today's timetable:\n"
                 + "\n".join(lines)
             )
-
-        # =====================================================
-        # MARK ATTENDANCE
-        # =====================================================
-
-        if intent == "MARK_ATTENDANCE":
-            if result.get("status") == "CONFIRMATION_REQUIRED":
-                return result.get(
-                    "message",
-                    "Please confirm this attendance update.",
-                )
-
-            student_name = result.get(
-                "student_name",
-                "The student",
-            )
-
-            attendance_status = result.get(
-                "status",
-                "",
-            ).lower()
-
-            attendance_date = result.get(
-                "date",
-                "the requested date",
-            )
-
-            return (
-                f"{student_name} was marked "
-                f"{attendance_status} "
-                f"on {attendance_date}."
-            )
-
-        # =====================================================
-        # SCHOOL ANALYTICS
-        # =====================================================
 
         if intent == "SCHOOL_ANALYTICS":
             percentage = result.get(
@@ -302,44 +375,6 @@ class PersonaService:
                     f"The school's overall attendance is "
                     f"{percentage}%."
                 )
-
-        # =====================================================
-        # ESCALATION
-        # =====================================================
-
-        if intent == "ESCALATION":
-            if result.get("status") == "CONFIRMATION_REQUIRED":
-                return result.get(
-                    "message",
-                    "Please confirm the escalation request.",
-                )
-
-            if result.get("status") == "SUBMITTED":
-                request_id = result.get("request_id")
-
-                if request_id:
-                    return (
-                        "Your escalation request has been submitted. "
-                        f"Request ID: {request_id}."
-                    )
-
-                return (
-                    "Your escalation request has been submitted."
-                )
-
-        # =====================================================
-        # GENERIC CONFIRMATION
-        # =====================================================
-
-        if intent == "CONFIRMATION_REQUIRED":
-            return result.get(
-                "message",
-                "Please confirm this action.",
-            )
-
-                # =====================================================
-        # FEES
-        # =====================================================
 
         if intent == "FEES":
             total = result.get("total_fees")
@@ -367,9 +402,5 @@ class PersonaService:
                     f"paid: {currency} {paid:,.2f}, "
                     f"pending: {currency} {pending:,.2f}."
                 )
-
-        # =====================================================
-        # SAFE GENERIC FALLBACK
-        # =====================================================
 
         return "I completed the request and received a result."
