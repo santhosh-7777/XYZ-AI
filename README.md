@@ -766,48 +766,6 @@ Expected: Escalation request created.
 
 ---
 
-## Remaining Verification
-
-- 🟠 **Multilingual Voice E2E** — architecture supports it; full end-to-end testing across target languages is still required before claiming complete coverage.
-- 🟠 **Full Regression** — cover Student/Parent/Teacher/Principal flows across text, voice, confirmation, escalation, follow-ups, corrections, and multilingual interaction.
-- 🔴 **Assignment Gap Check** — `ANNOUNCEMENT` and `LEAVE` are currently unsupported intents; must be checked against actual assignment requirements. If required, implement as independent modules; if not, keep them explicitly unsupported rather than falsely represented.
-- 🟠 **Deployment** — production database, environment variables, secrets, CORS, HTTPS, and smoke tests.
-
----
-
-## Known Limitations
-
-1. **Local Whisper Performance** — current dev config uses the `tiny` model on CPU with `int8` compute; intentionally lightweight. Larger models improve accuracy but need more compute.
-2. **Multilingual Voice Accuracy** — language detection exists, but detection and transcription quality must be validated per required language before claiming full multilingual voice support.
-3. **Streaming Voice** — the architecture is request-based (record → upload → STT → AI → TTS → playback), not a real-time streaming conversational system.
-4. **Avatar** — current frontend provides a visual assistant/voice state UI; facial animation, lip sync, and real-time streaming animation are future enhancements, not core requirements.
-
----
-
-## Deployment
-
-```
-                   Internet
-                      │
-                      ▼
-              ┌───────────────┐
-              │ Next.js       │
-              │ Frontend      │
-              └───────┬───────┘
-                      │ HTTPS
-                      ▼
-              ┌───────────────┐
-              │ FastAPI       │
-              │ Backend       │
-              └───────┬───────┘
-                      │
-          ┌───────────┼───────────┐
-          │           │           │
-          ▼           ▼           ▼
-      PostgreSQL     Grok       Voice
-```
-
-Use environment variables for `DATABASE_URL`, `JWT_SECRET_KEY`, `XAI_API_KEY`, `XAI_MODEL`. Secrets must never be committed to Git.
 
 ---
 
