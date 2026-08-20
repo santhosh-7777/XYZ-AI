@@ -1,24 +1,10 @@
 # XYZ-AI
 
-### Intelligent, Role-Aware, Multilingual AI School Assistant
+### Role-Aware, Multilingual AI School Assistant
 
-XYZ-AI is a modular AI-powered school assistant that provides personalized, secure, and actionable assistance to Students, Parents, Teachers, and Principals through a unified text and voice interface.
+XYZ-AI is a modular AI-powered school assistant that provides personalized, secure, and actionable assistance to Students, Parents, Teachers, and Principals through a text and voice interface.
 
-The system combines:
-
-- Role-Based Access Control (RBAC)
-- JWT authentication
-- Multilingual intent understanding
-- Semantic intent classification and entity extraction
-- Tool-based backend actions
-- Persona-aware response generation
-- Conversational context and follow-ups
-- Explicit confirmation for state-changing actions
-- Human escalation
-- Speech-to-text and text-to-speech
-- Multilingual interaction
-- AI-assisted natural-language responses
-- Secure backend authorization
+**Scope note:** This submission implements the XYZ AI application layer only. The four ERP portals referenced in the assignment (student-portal, parent-portal, management-portal, staff-portal) are represented here as mock backend services (`backend/app/services/`) backed by PostgreSQL, standing in for those external systems. XYZ AI's own responsibility — intent understanding, RBAC, tool orchestration, confirmation, persona-aware response generation — is what this repo implements.
 
 Core architectural principle:
 
@@ -29,134 +15,102 @@ Core architectural principle:
 ## Table of Contents
 
 - [Overview](#overview)
-- [Problem Statement](#problem-statement)
 - [Key Features](#key-features)
-- [User Roles](#user-roles)
+- [User Roles and Personas](#user-roles-and-personas)
 - [System Architecture](#system-architecture)
 - [Text Pipeline](#text-pipeline)
 - [Voice Pipeline](#voice-pipeline)
-- [Multilingual AI](#multilingual-ai)
+- [Multilingual Support](#multilingual-support)
 - [AI and ML Architecture](#ai-and-ml-architecture)
 - [Confirmation Workflow](#confirmation-workflow)
 - [Human Escalation](#human-escalation)
-- [Conversation Context](#conversation-context)
 - [Security Architecture](#security-architecture)
 - [Technology Stack](#technology-stack)
 - [Project Structure](#project-structure)
-- [Core Modules](#core-modules)
-- [Database and Data Layer](#database-and-data-layer)
-- [API Overview](#api-overview)
+- [Services vs Tools](#services-vs-tools)
+- [Testing and Evaluation Data](#testing-and-evaluation-data)
 - [Environment Variables](#environment-variables)
 - [Local Development](#local-development)
-- [Example Interactions](#example-interactions)
-- [Security and Authorization](#security-and-authorization)
-- [Testing](#testing)
 - [Current Implementation Status](#current-implementation-status)
-- [Remaining Verification](#remaining-verification)
 - [Known Limitations](#known-limitations)
-- [Deployment](#deployment)
-- [Demo Flow](#demo-flow)
-- [Design Principles](#design-principles)
-- [What XYZ-AI Does NOT Do](#what-xyz-ai-does-not-do)
-- [Why This Architecture?](#why-this-architecture)
 - [Future Improvements](#future-improvements)
-- [Security Checklist](#security-checklist)
 - [Author](#author)
 
 ---
 
 ## Overview
 
-XYZ-AI lets a user talk to the school system in plain language instead of navigating dashboards and menus.
-
 ```
 User
  ↓
-Understanding
+Understanding (intent + entities)
  ↓
-Identity
+Identity (JWT)
  ↓
-Authorization
+Authorization (RBAC)
  ↓
-Tool
+Tool (mock service call)
  ↓
 Verified Result
  ↓
-Persona
+Persona-aware response (Grok)
  ↓
-Natural Language
+User
 ```
 
-The frontend is presentation-only. The backend owns authentication, authorization, RBAC, tool execution, confirmation, and security.
+The frontend is presentation-only. The backend owns authentication, authorization, RBAC, tool execution, and confirmation.
 
----
+### High-Level Architecture Diagram
 
-## Problem Statement
+```mermaid
+flowchart TD
+    U[User - Text or Voice] --> FE[Next.js Frontend]
+    FE --> API[FastAPI API Layer]
+    API --> AUTH[Auth: JWT Validation]
+    AUTH --> CONV[Conversation Manager]
+    CONV --> NLU[Intent Classification + Entity Extraction<br/>ML models]
+    NLU --> RBAC[RBAC Check]
+    RBAC -->|Denied| DENY[403 Forbidden]
+    RBAC -->|Allowed| TOOL[Tool Layer]
+    TOOL --> SVC[Service Layer<br/>Mock ERP APIs]
+    SVC --> DB[(PostgreSQL)]
+    SVC --> RESULT[Verified Result]
+    RESULT --> PERSONA[Persona Service]
+    PERSONA --> GROK[Grok - Response Generation]
+    GROK --> FE
+    FE --> U
 
-School systems typically require different users to navigate separate dashboards, forms, and menus just to check attendance, timetables, fees, or exam schedules. This is slow, role-agnostic in design, and offers no natural way to act on requests (e.g. marking attendance) without manual form entry.
-
-XYZ-AI solves this by giving every role — Student, Parent, Teacher, Principal — a single conversational (text or voice) interface that understands intent, enforces what that specific user is allowed to do, and only then performs the action.
+    style RBAC fill:#7c3aed,color:#fff
+    style AUTH fill:#7c3aed,color:#fff
+    style DENY fill:#dc2626,color:#fff
+    style GROK fill:#059669,color:#fff
+```
 
 ---
 
 ## Key Features
 
-### 1. Multi-Role School Assistant
-
-XYZ-AI supports four primary personas: Student, Parent, Teacher, Principal. Each role has different permissions and capabilities.
-
-### 2. JWT Authentication
-
-Users authenticate using JWT-based authentication. The authenticated identity is passed through the backend and used to determine the user's actual role. The AI cannot change the authenticated user's role.
-
-### 3. Role-Based Access Control
-
-Authorization is enforced by the backend, not by an LLM prompt.
-
-```
-Student
-   │
-   ├── Personal attendance       ✅
-   ├── Personal assignments      ✅
-   ├── Personal exams            ✅
-   └── School-wide analytics     ❌
-
-Principal
-   │
-   ├── School analytics          ✅
-   ├── School-level information  ✅
-   └── Administrative tools      ✅
-```
+- Multi-role assistant: Student, Parent, Teacher, Principal
+- JWT authentication with backend-enforced RBAC
+- Text and voice interaction
+- Semantic intent classification and entity extraction
+- Persona-aware response generation via Grok
+- Confirmation workflow for state-changing actions
+- Human escalation with backend-verified completion
+- Conversational context and follow-ups
 
 ---
 
-## User Roles
+## User Roles and Personas
 
-### Student
+Each role is paired with a defined AI persona used for response generation:
 
-- Attendance and attendance history
-- Timetable
-- Assignments
-- Exams
-- Academic performance
-- Authorized fee information
-
-### Parent
-
-- Child lookup
-- Child attendance and attendance history
-- Fee information
-- Academic information
-- Human escalation
-
-Parent-child relationships are enforced by backend data and authorization logic.
-
-### Teacher
-
-- Attendance lookup and updates
-- Student-related information
-- Escalation
-- Confirmation-based state-changing actions
+| Role | Persona | Access |
+|---|---|---|
+| Student | Friendly and supportive Academic Assistant | Own attendance, timetable, assignments, exams, academic performance, fees |
+| Parent | Caring and patient Parent Support Assistant | Linked child's attendance, academic info, fees; escalation |
+| Teacher | Professional Teaching Assistant | Student attendance lookup and updates (confirmation-gated), escalation |
+| Principal | Professional Management Assistant | School-wide analytics, attendance, fees, administrative info |
 
 ```
 Teacher: "Mark Rahul absent today."
@@ -165,240 +119,157 @@ Teacher: "Yes."
 AI:      "Rahul was marked absent today."
 ```
 
-### Principal
-
-- School analytics
-- School-level attendance information
-- Fee-related information
-- Administrative functionality
+Authorization is enforced by the backend (`backend/app/security/rbac.py`), never by prompt instruction.
 
 ---
 
 ## System Architecture
 
-```
-frontend/
-    ↓
-FastAPI API layer
-    ↓
-Authentication
-    ↓
-Conversation management
-    ↓
-Intent understanding
-    ↓
-Entity extraction
-    ↓
-RBAC
-    ↓
-Tool execution
-    ↓
-Persona-aware response
-    ↓
-Grok
-```
+See the [High-Level Architecture Diagram](#high-level-architecture-diagram) above. Component-to-folder mapping:
 
-For voice:
-
-```
-Microphone
-    ↓
-/voice/process
-    ↓
-Faster-Whisper
-    ↓
-Transcription + language detection
-    ↓
-Existing AI orchestration
-    ↓
-RBAC
-    ↓
-Tool execution
-    ↓
-Confirmation if required
-    ↓
-Persona-aware response
-    ↓
-TTS
-    ↓
-Audio
-    ↓
-Frontend avatar
-```
-
-The voice interface reuses the same backend AI and authorization pipeline instead of duplicating business logic for voice-only flows.
+| Stage | Folder |
+|---|---|
+| API layer | `backend/app/api` |
+| Authentication | `backend/app/auth`, `backend/app/security` |
+| Conversation management | `backend/app/conversation` |
+| Intent + entity understanding | `backend/app/ML`, `backend/app/llm` |
+| RBAC | `backend/app/security/rbac.py` |
+| Tool execution | `backend/app/tools` → `backend/app/services` |
+| Persona-aware response | `backend/app/persona` |
 
 ---
 
 ## Text Pipeline
 
-```
-User
-  ↓
-Next.js
-  ↓
-/ai/act
-  ↓
-ConversationManager
-  ↓
-Intent Classification
-  ↓
-Entity Extraction
-  ↓
-RBAC
-  ↓
-Tool Selection
-  ↓
-Tool Execution
-  ↓
-Verified Backend Result
-  ↓
-PersonaService / Response Generation
-  ↓
-Grok
-  ↓
-Frontend
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant FE as Frontend
+    participant API as /ai/act
+    participant CM as ConversationManager
+    participant ML as Intent + Entity ML
+    participant RBAC as RBAC
+    participant T as Tool
+    participant S as Service (Mock API)
+    participant P as PersonaService
+    participant G as Grok
+
+    U->>FE: "What is my attendance?"
+    FE->>API: POST /ai/act (JWT)
+    API->>CM: process(message, user)
+    CM->>ML: classify intent + extract entities
+    ML-->>CM: intent=ATTENDANCE, entities={}
+    CM->>RBAC: check(user.role, intent)
+    RBAC-->>CM: allowed
+    CM->>T: execute(user_id)
+    T->>S: get_attendance(user_id)
+    S-->>T: verified data
+    T-->>CM: result
+    CM->>P: build_response(result, persona)
+    P->>G: generate natural language
+    G-->>P: response text
+    P-->>API: final response
+    API-->>FE: response
+    FE-->>U: "Your attendance is 88%"
 ```
 
-The LLM does not directly execute backend tools:
-
-```
-LLM      → Understanding / response generation
-Backend  → Authorization / tool execution
-```
-
-This keeps natural-language generation out of the security boundary.
+The LLM does not directly execute backend tools. It handles understanding and response generation only; the backend handles authorization and execution.
 
 ---
 
 ## Voice Pipeline
 
-```
-Microphone
-    ↓
-Audio Upload
-    ↓
-/voice/process
-    ↓
-Faster-Whisper
-    ↓
-Transcribed Text + Detected Language
-    ↓
-AI Orchestration
-    ↓
-Intent + Entities
-    ↓
-RBAC
-    ↓
-Tool / Confirmation
-    ↓
-Verified Result
-    ↓
-Persona-aware Response
-    ↓
-TTS
-    ↓
-Generated Audio
-    ↓
-Frontend (Avatar / Audio Playback)
+```mermaid
+flowchart LR
+    MIC[Microphone] --> REC[Browser MediaRecorder]
+    REC --> UP[Upload audio<br/>/voice/process]
+    UP --> STT[Faster-Whisper<br/>STT + Language Detection]
+    STT --> TXT[Transcribed Text]
+    TXT --> PIPE[Text Pipeline<br/>Intent → RBAC → Tool → Persona → Grok]
+    PIPE --> TTS[Edge TTS]
+    TTS --> AUD[Generated Audio]
+    AUD --> PLAY[Frontend Playback]
+
+    style STT fill:#0891b2,color:#fff
+    style TTS fill:#0891b2,color:#fff
+    style PIPE fill:#7c3aed,color:#fff
 ```
 
-Current development STT configuration:
+Voice reuses the same backend orchestration and authorization pipeline as text, no separate business logic path for voice.
+
+Current dev STT config:
 
 ```python
-WhisperModel(
-    "tiny",
-    device="cpu",
-    compute_type="int8",
-)
+WhisperModel("tiny", device="cpu", compute_type="int8")
 ```
 
-The provider interface is modular, so the STT/TTS implementation can be swapped without redesigning the rest of the voice pipeline.
+**Note on avatar:** the frontend currently plays back generated audio; there is no avatar or facial-expression component implemented in this submission. This is listed under Known Limitations rather than claimed as complete.
 
 ---
 
-## Multilingual AI
+## Multilingual Support
 
-```
-User language
-     ↓
-STT / Text
-     ↓
-Multilingual embeddings
-     ↓
-Intent classification
-     ↓
-Entities
-     ↓
-Backend authorization
-     ↓
-Grok response generation
-     ↓
-Detected/requested language
-     ↓
-TTS
-```
+Semantic understanding uses `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`.
 
-Model used: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` for multilingual semantic intent understanding.
+| Language | Status |
+|---|---|
+| English | ✅ Tested |
+| Hindi | ✅ Tested |
+| Tamil | 🟠 Supported, not fully verified |
+| Telugu | 🟠 Supported, not fully verified |
+| Marathi | 🟠 Supported, not fully verified |
+| Bengali | 🟠 Supported, not fully verified |
+| Gujarati | 🟠 Supported, not fully verified |
+| Punjabi | 🟠 Supported, not fully verified |
+| Kannada | 🟠 Supported, not fully verified |
+| Malayalam | 🟠 Supported, not fully verified |
+| Urdu | 🟠 Supported, not fully verified |
 
-The architecture supports multilingual processing; complete end-to-end validation across every target language is part of final verification, not yet claimed as fully production-ready.
+Evaluation data for code-mixed and multilingual voice input is tracked in `Data/multilingual_code_mixed_voice_eval.csv`.
 
 ---
 
 ## AI and ML Architecture
 
-XYZ-AI uses multiple AI components rather than one model for every responsibility.
+- **Intent classification** — trained classifier, `ML/models/intent/intent_classifier.joblib`, trained via `ML/training/intent/train.py`
+- **Intent embeddings model** — `ML/models/intent/intent_embeddings_classifier.joblib`, trained via `ML/training/intent/train_embeddings.py` (semantic backup/ensemble for the primary classifier)
+- **Entity extraction** — `ML/training/entities/extractor.py`
+- **Runtime inference** — `ML/inference/understand.py`, called from the conversation layer
+- **Response generation** — Grok, via OpenAI-compatible SDK (`backend/app/llm`)
 
-**Semantic Intent Understanding** — `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` for multilingual semantic representation.
-
-**Intent Classification** — a trained Joblib-based classifier maps natural-language input into supported backend operations.
-
-```
-"Show my attendance"      → ATTENDANCE
-"What's my timetable today?" → TIMETABLE
-"Mark Rahul absent"       → MARK_ATTENDANCE
-```
-
-**Grok** — used for natural-language response generation via the OpenAI Python SDK (xAI exposes an OpenAI-compatible API).
-
-```
-Grok → Natural-language understanding / response generation
-Grok → NOT direct database access
-```
-
-Grok never becomes the authorization layer.
+Grok generates language; it does not access the database directly and cannot grant permissions.
 
 ---
 
 ## Confirmation Workflow
 
-State-changing operations require explicit confirmation.
+```mermaid
+sequenceDiagram
+    participant U as User (Teacher)
+    participant CM as ConversationManager
+    participant RBAC as RBAC
+    participant C as ConfirmationService
+    participant T as Tool
 
-```
-User: "Mark Rahul absent today"
-     ↓
-Intent + Entity Extraction
-     ↓
-Authorization
-     ↓
-Create Pending Action
-     ↓
-Ask Confirmation → "Please confirm..."
-     ↓
-User: "Yes"
-     ↓
-Resolve Confirmation
-     ↓
-Validate Action Ownership
-     ↓
-Check Expiry
-     ↓
-Consume Pending Action
-     ↓
-Execute Authorized Tool
+    U->>CM: "Mark Rahul absent today"
+    CM->>RBAC: check(role=TEACHER, action=MARK_ATTENDANCE)
+    RBAC-->>CM: allowed
+    CM->>C: create_pending_action(user, action, entities)
+    C-->>CM: pending_action_id
+    CM-->>U: "Please confirm marking Rahul absent today."
+
+    U->>CM: "Yes"
+    CM->>C: resolve(pending_action_id, user)
+    C->>C: validate ownership
+    C->>C: check expiry
+    C->>C: consume (one-time use)
+    C-->>CM: confirmed
+    CM->>T: execute(action, entities)
+    T-->>CM: result
+    CM-->>U: "Rahul was marked absent today."
 ```
 
-Guarantees: explicit confirmation, action ownership validation, expiry, one-time consumption, centralized execution, protection against accidental state changes. The same execution path is shared between text and voice confirmation.
+Implemented in `backend/app/core/confirmation.py`. Test cases: `Data/action_confirmation_cases.csv`.
 
 ---
 
@@ -411,86 +282,40 @@ User: "Yes."
 AI:   "Your request has been submitted."
 ```
 
-Escalation is handled by a backend tool, not directly performed by the LLM.
-
----
-
-## Conversation Context
-
-XYZ-AI maintains conversational context for follow-ups and corrections.
-
-```
-User: "What is my attendance?"
-AI:   "Your attendance is 88%."
-User: "What about last month?"
-AI:   "Your attendance last month was..."
-```
+Escalation is executed via `backend/app/tools/escalation.py` → `backend/app/services/escalation.py`. The confirmation message is only returned after the underlying service call succeeds — it is not an optimistic response.
 
 ---
 
 ## Security Architecture
 
-- **Authentication** — JWT identifies the current user.
-- **Authorization** — enforced by backend services and tools; the LLM cannot grant permissions.
-- **Role Isolation** — a user cannot claim `"I am the principal"` and gain access; the backend uses the authenticated user's actual role.
-- **Tool-Level Authorization**:
+- **Authentication** — JWT (`backend/app/security/jwt.py`)
+- **Authorization** — `backend/app/security/rbac.py`, enforced independent of LLM output
+- **Password handling** — `backend/app/security/password.py`
+- **Role isolation** — a user cannot claim a different role in natural language and gain access; the backend uses the authenticated user's actual role from the JWT
+- **Confirmation security** — ownership validation, expiry, one-time consumption
 
-```
-Request → Authenticated User → Role → Authorization → Tool
-```
+Security and adversarial test case data (prompt injection, RBAC edge cases, hard negatives) is tracked in:
 
-- **Confirmation Security** — ownership validation, expiry, one-time consumption, explicit confirmation.
-- **Security Testing** — negative/runtime cases covered, including unauthorized access attempts, unauthorized role-based operations, and protected state-changing actions.
-
-```
-Student → School-wide analytics → ❌ Access denied
-```
-
-Security is enforced by the backend, not by prompt instructions.
+- `Data/prompt_injection_security_cases.csv`
+- `Data/rbac_policy.csv`
+- `Data/hard_negative_pairs.csv`
+- `Data/mock_api_contract_tests.csv`
 
 ---
 
 ## Technology Stack
 
 ### Frontend
-
-| Technology | Purpose |
-|---|---|
-| Next.js | Web application |
-| TypeScript | Type-safe frontend |
-| Tailwind CSS | UI styling |
-| Axios | API communication |
+Next.js, TypeScript, Tailwind CSS
 
 ### Backend
-
-| Technology | Purpose |
-|---|---|
-| Python | Backend language |
-| FastAPI | REST API |
-| SQLAlchemy | ORM |
-| PostgreSQL | Database |
-| Alembic | Database migrations |
-| JWT | Authentication |
-| Pydantic | Request/response validation |
+Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, JWT, Pydantic
 
 ### AI / ML
-
-| Technology | Purpose |
-|---|---|
-| Sentence Transformers | Multilingual semantic embeddings |
-| paraphrase-multilingual-MiniLM-L12-v2 | Multilingual intent representation |
-| Joblib | Intent classifier persistence |
-| Grok | Natural-language response generation |
-| OpenAI Python SDK | OpenAI-compatible xAI client |
+Sentence Transformers (multilingual MiniLM), scikit-learn/Joblib classifiers, Grok (OpenAI-compatible SDK)
 
 ### Voice
-
-| Technology | Purpose |
-|---|---|
-| Faster-Whisper | Speech-to-text |
-| Edge TTS | Text-to-speech |
-| Browser MediaRecorder | Microphone recording |
-| Web audio playback | Response audio |
+Faster-Whisper (STT), Edge TTS (TTS)
 
 ---
 
@@ -498,140 +323,138 @@ Security is enforced by the backend, not by prompt instructions.
 
 ```
 XYZ-AI/
-│
 ├── backend/
+│   ├── alembic/                  # DB migrations
 │   └── app/
-│       ├── api/
-│       │   ├── ai.py
-│       │   ├── voice.py
-│       │   └── ...
-│       ├── conversation/
-│       │   ├── context.py
-│       │   ├── manager.py
-│       │   └── ...
-│       ├── core/
-│       │   └── confirmation.py
-│       ├── db/
-│       │   ├── session.py
-│       │   └── ...
-│       ├── models/
-│       │   ├── user.py
-│       │   ├── role.py
-│       │   └── ...
-│       ├── schemas/
-│       ├── security/
-│       ├── persona/
-│       │   └── service.py
-│       └── voice/
-│           └── service.py
+│       ├── ai/                   # parent_lookup.py, student_lookup.py
+│       ├── api/                  # ai.py, auth.py, fees.py, voice.py
+│       ├── auth/                 # service.py
+│       ├── config/               # settings.py
+│       ├── conversation/         # context.py, manager.py
+│       ├── core/                 # confirmation.py, logging.py
+│       ├── db/                   # session.py, seeds/
+│       ├── llm/                  # base.py, provider.py, response_generator.py
+│       ├── models/               # user.py, role.py, permission.py
+│       ├── persona/              # service.py
+│       ├── schemas/              # ai.py, auth.py
+│       ├── security/             # deps.py, jwt.py, password.py, rbac.py
+│       ├── services/             # mock ERP layer: attendance, fees, exam,
+│       │                         # timetable, assignment, escalation,
+│       │                         # academic_performance
+│       ├── tools/                # LLM-callable wrappers over services/
+│       ├── utils/
+│       └── voice/                # stt/, tts/, service.py
 │
-└── frontend/
-    └── ...
+├── ML/
+│   ├── inference/                # understand.py
+│   ├── models/intent/            # intent_classifier.joblib,
+│   │                             # intent_embeddings_classifier.joblib
+│   └── training/
+│       ├── entities/             # extractor.py
+│       └── intent/               # train.py, train_embeddings.py
+│
+├── Data/                         # catalogs + evaluation/test case CSVs
+│   ├── rbac_policy.csv
+│   ├── tool_catalog.csv
+│   ├── intent_catalog.csv
+│   ├── entity_catalog.csv
+│   ├── entity_extraction_gold.csv
+│   ├── persona_catalog.csv
+│   ├── prompt_injection_security_cases.csv
+│   ├── mock_api_contract_tests.csv
+│   ├── multilingual_code_mixed_voice_eval.csv
+│   ├── hard_negative_pairs.csv
+│   ├── conversation_context_cases.csv
+│   ├── action_confirmation_cases.csv
+│   ├── assessment_coverage_matrix.csv
+│   └── intent_ml_{train,test,validation,master}.csv
+│
+├── tests/
+│   ├── unit/                     # test_attendance, test_confirmation,
+│   │                             # test_conversation, test_fees,
+│   │                             # test_persona, test_rbac
+│   └── integration/               # scaffolded, not yet populated
+│
+├── frontend/
+│   └── app/
+│       ├── chat/                 # page.tsx
+│       └── login/                # page.tsx
+│
+├── generated_audio/               # TTS output (runtime)
+├── temp_audio/                    # STT input staging (runtime)
+├── alembic.ini
+├── requirements.txt
+└── .env.example
 ```
-
-The exact file tree may evolve. The important boundary is that the frontend stays presentation-only while backend services own authorization, tools, and business logic.
 
 ---
 
-## Core Modules
+## Services vs Tools
 
-- **Authentication** — login, JWT creation, current-user resolution, auth dependencies
-- **RBAC** — role identification, permission checks, protected operations (`STUDENT`, `PARENT`, `TEACHER`, `PRINCIPAL`)
-- **Conversation Manager** — context, previous interactions, follow-ups, correction handling
-- **Intent Classification** — maps natural language into supported intents
-- **Entity Extraction** — identifies information required by tools, e.g. `"Mark Rahul absent today"` → `student=Rahul, status=absent, date=today`
-- **Persona Service** — transforms backend results into responses appropriate for the current role
-- **Attendance Tool** — authorized attendance operations, including confirmation-gated state changes
-- **Escalation Tool** — handles requests to escalate to a human
-- **Confirmation Service** — pending actions, ownership, expiry, one-time consumption
-- **Voice Service** — coordinates STT → AI Handler → TTS through replaceable provider interfaces
+Each domain (attendance, fees, exams, timetable, assignments, escalation, academic performance) has two files:
+
+- **`services/<domain>.py`** — the mock ERP/API layer. Pure data logic, no LLM awareness, no authorization decisions.
+- **`tools/<domain>.py`** — a thin wrapper exposing the service to the AI orchestration layer as a callable tool.
+
+```python
+# services/academic_performance.py
+class AcademicPerformanceService:
+    """Mock academic performance service — represents the school ERP/mock API.
+    No LLM logic, no authorization decisions."""
+
+    @staticmethod
+    def get_performance(user_id: int) -> dict:
+        ...
+
+# tools/academic_performance.py
+class AcademicPerformanceTool:
+    """Exposes academic performance to the AI orchestration layer."""
+    name = "academic_performance"
+
+    @staticmethod
+    def execute(user_id: int) -> dict:
+        return AcademicPerformanceService.get_performance(user_id)
+```
+
+This keeps the mock-API boundary explicit: `services/` never knows it's being called by an LLM-driven tool, and `tools/` never contains business logic itself.
 
 ---
 
-## Database and Data Layer
+## Testing and Evaluation Data
 
-```
-PostgreSQL → SQLAlchemy → FastAPI
-```
+Unit tests (`tests/unit/`): attendance, confirmation, conversation, fees, persona, RBAC.
 
-Schema changes are managed through Alembic. The backend is responsible for all database access; the frontend never directly accesses PostgreSQL.
+`tests/integration/` is scaffolded but not yet populated as of this submission.
 
----
-
-## API Overview
-
-- **Authentication** — login, current user, JWT
-- **AI** — `POST /ai/act` handles natural-language requests
-- **Confirmation** — `POST /ai/confirm` resolves pending actions
-- **Voice** — `POST /voice/process` accepts uploaded audio and runs Audio → STT → AI → TTS; generated audio is served through the voice audio endpoint
+Structured evaluation data (`Data/`) covers: RBAC policy matrix, intent/entity/tool/persona catalogs, prompt injection cases, mock API contract tests, multilingual and code-mixed voice evaluation, hard negative pairs, conversation context cases, confirmation cases, and an assessment coverage matrix. These represent authored test scenarios; not all have been executed as automated regression tests at time of submission.
 
 ---
 
 ## Environment Variables
 
-Create a local `.env` file:
-
 ```
 DATABASE_URL=postgresql+psycopg://USERNAME:PASSWORD@HOST:PORT/DATABASE
-
 JWT_SECRET_KEY=your-secret-key
-
 XAI_API_KEY=your-xai-api-key
 XAI_MODEL=grok-4.1-fast
 ```
 
-Never commit `.env`. Never expose `XAI_API_KEY` to the frontend.
-
-Use `.env.example` to document required configuration without real secrets:
-
-```
-DATABASE_URL=
-JWT_SECRET_KEY=
-XAI_API_KEY=
-XAI_MODEL=grok-4.1-fast
-```
+Use `.env.example` as the template. Never commit `.env`.
 
 ---
 
 ## Local Development
 
-### Prerequisites
-
-Python, Node.js, npm, PostgreSQL, Git. A Python virtual environment is recommended.
-
-### Backend Setup
-
 ```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\activate      # Windows
+.venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-Make sure `DATABASE_URL`, `JWT_SECRET_KEY`, `XAI_API_KEY`, and `XAI_MODEL` are set.
-
-### Database
-
-```bash
 alembic upgrade head
-```
-
-Run the project's seed command/script after migrations if required.
-
-### Running the Backend
-
-The backend uses imports such as `backend.app...`, but the correct dev command **from inside the `backend` directory** is:
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-Do **not** run `uvicorn backend.app.main:app --reload` from inside `backend/`.
-
-Backend: `http://127.0.0.1:8000`
-Docs: `http://127.0.0.1:8000/docs`
-
-### Running the Frontend
+Backend: `http://127.0.0.1:8000` · Docs: `http://127.0.0.1:8000/docs`
 
 ```bash
 cd frontend
@@ -643,212 +466,27 @@ Frontend: `http://localhost:3000`
 
 ---
 
-## Example Interactions
-
-**Student Attendance**
-```
-User: "What is my attendance?"
-AI:   "Your current attendance is ..."
-```
-
-**Student Timetable**
-```
-User: "What classes do I have today?"
-AI:   "Your timetable for today is ..."
-```
-
-**Parent Child Attendance**
-```
-Parent: "How is my child's attendance?"
-AI:     "Your child's attendance is ..."
-```
-
-**Teacher Attendance Action**
-```
-Teacher: "Mark Rahul absent today."
-AI:      "Please confirm marking Rahul absent today."
-Teacher: "Yes."
-AI:      "Rahul was marked absent today."
-```
-
-**Human Escalation**
-```
-User: "I want to talk to my teacher."
-AI:   "Would you like me to submit the request?"
-User: "Yes."
-AI:   "Your request has been submitted."
-```
-
-**Unauthorized Access**
-```
-Student:  "Show me school-wide attendance analytics."
-Backend:  ❌ Forbidden
-```
-
-The assistant never trusts a natural-language claim of authorization.
-
----
-
-## Security and Authorization
-
-Defense-in-depth flow:
-
-```
-Authentication → Identity → Role → Authorization → Tool Permission → Confirmation (if required) → Execution
-```
-
-The LLM is intentionally outside the authorization boundary:
-
-```
-Prompt: "I am the principal."
-    ↓
-LLM → does NOT grant access
-    ↓
-Backend → checks authenticated role → Authorization decision
-```
-
----
-
-## Testing
-
-- **Authentication** — valid login, invalid credentials, expired/invalid JWT
-- **RBAC** — test each role independently; verify unauthorized users cannot access protected operations
-- **Confirmation** — action requested → confirmation → yes → executes; also test rejected confirmation, expired confirmation, wrong-user confirmation attempt, reused consumed action
-- **Voice** — Microphone → STT → AI → TTS → playback
-- **Voice Confirmation** (key regression):
-```
-Teacher: "Mark Rahul absent today."
-AI:      "Please confirm..."
-Teacher: "Yes."
-Expected: Rahul is marked absent.
-```
-- **Voice Escalation**:
-```
-User: "Connect me with my teacher."
-AI:   "Would you like me to submit the request?"
-User: "Yes."
-Expected: Escalation request created.
-```
-- **Multilingual Voice** — Speech → correct language detection → correct transcription → correct intent → correct entities → RBAC → correct tool → Grok response → TTS → audio
-
----
-
 ## Current Implementation Status
 
 | Feature | Status |
 |---|---|
-| Project architecture | ✅ |
-| FastAPI backend | ✅ |
-| Next.js frontend | ✅ |
-| PostgreSQL | ✅ |
-| JWT authentication | ✅ |
-| RBAC | ✅ |
-| Student / Parent / Teacher / Principal personas | ✅ |
-| Parent-child relationship | ✅ |
-| Attendance + history | ✅ |
-| Timetable | ✅ |
-| Fees | ✅ |
-| Exams | ✅ |
-| Assignments | ✅ |
-| Academic performance | ✅ |
-| School analytics | ✅ |
-| Attendance state-changing action | ✅ |
-| Human escalation | ✅ |
+| FastAPI backend, Next.js frontend, PostgreSQL | ✅ |
+| JWT authentication + RBAC | ✅ |
+| Four roles with distinct personas | ✅ |
+| Attendance, timetable, fees, exams, assignments, academic performance (mock services) | ✅ |
 | Confirmation workflow (ownership, expiry, one-time use) | ✅ |
-| Conversation context, follow-ups, corrections | ✅ |
-| Multilingual embeddings | ✅ |
-| Grok integration | ✅ |
-| Voice STT architecture + language detection | ✅ |
-| TTS architecture + voice endpoint | ✅ |
-| Frontend voice integration | ✅ |
-| Voice confirmation | ✅ |
-| Security negative testing | ✅ |
-
----
+| Human escalation | ✅ |
+| Conversation context / follow-ups | ✅ |
+| Intent classification + entity extraction (ML) | ✅ |
+| Grok response generation | ✅ |
+| Voice STT + TTS pipeline | ✅ |
+| Multilingual embeddings | ✅ (English/Hindi verified, others supported not fully verified) |
 
 
 ---
 
-## Demo Flow
-
-1. **Student** — log in, ask `"What is my attendance?"`, show personalized response.
-2. **Student Security** — ask `"Show me school-wide analytics."`, expect access denied (demonstrates backend RBAC).
-3. **Parent** — log in, ask `"How is my child's attendance?"`, show child-specific info.
-4. **Teacher** — say `"Mark Rahul absent today."`, confirm with `"Yes."`, expect Rahul marked absent.
-5. **Escalation** — say `"Connect me with my teacher."`, confirm with `"Yes."`, expect escalation request created.
-6. **Multilingual Voice** — demonstrate voice → language detection → intent understanding → RBAC → tool → Grok → TTS → voice response in a supported non-English language.
 
 ---
-
-## Design Principles
-
-- **Backend Is the Authority** — controls authentication, authorization, business logic, tool execution, confirmation, and security.
-- **LLM Is Not the Security Boundary** — Grok generates language; it cannot grant permissions, change roles, directly access the database, bypass RBAC, or execute unauthorized tools.
-- **Modular Voice Architecture** — `STTProvider → FasterWhisper`, `TTSProvider → Edge TTS`, both replaceable.
-- **Confirmation for State Changes** — reads execute directly when authorized; writes require explicit confirmation.
-- **Separation of Concerns** — Frontend (presentation) / Backend API (orchestration) / AI-ML (understanding-generation) / Security (authorization) / Tools (execution) / Database (persistence).
-
----
-
-## What XYZ-AI Does NOT Do
-
-- Put RBAC inside prompts
-- Let Grok directly execute tools
-- Move business logic into Next.js
-- Expose API keys to the frontend
-- Duplicate confirmation logic
-- Remove backend authorization
-- Treat natural-language claims as proof of role
-- Add unnecessary AI agents/frameworks
-
----
-
-## Why This Architecture?
-
-A conventional chatbot follows `User → LLM → Answer`. XYZ-AI instead follows:
-
-```
-User → Understanding → Identity → Authorization → Tool → Verified Result → Persona → Natural Language
-```
-
-This distinction matters for a school system: a natural-language model should never be the thing deciding whether a user is allowed to access sensitive information or perform a state-changing operation.
-
----
-
-## Future Improvements
-
-- Higher-accuracy multilingual STT
-- Streaming, real-time voice interaction
-- More advanced avatar animation and lip synchronization
-- Additional school workflows
-- More sophisticated long-term conversation memory
-- Notification integrations
-- Analytics dashboards
-- Additional language-specific TTS voices
-- Expanded automated test coverage
-- Production observability and monitoring
-
----
-
-## Security Checklist
-
-- [ ] JWT authentication verified
-- [ ] RBAC verified
-- [ ] Unauthorized operations denied
-- [ ] State-changing operations require confirmation
-- [ ] Confirmation ownership validated
-- [ ] Expired actions rejected
-- [ ] Consumed actions cannot be reused
-- [ ] API keys stored only in environment variables
-- [ ] `.env` excluded from Git
-- [ ] Frontend cannot access secrets
-- [ ] CORS configured for production
-- [ ] Database credentials protected
-- [ ] HTTPS enabled
-- [ ] Production database migrations verified
-- [ ] Voice endpoint tested
-- [ ] Multilingual flow tested
-- [ ] Final regression completed
 
 ---
 
@@ -856,8 +494,3 @@ This distinction matters for a school system: a natural-language model should ne
 
 **Santhosh Teja**
 Computer Science & Engineering, NIT Agartala
-
----
-
-*XYZ-AI — A secure, multilingual, role-aware AI assistant for schools.*
-*Understand → Authorize → Retrieve/Act → Verify → Explain*
